@@ -153,21 +153,13 @@
 </ol>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>dir      = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及文件，后面会提
-</span><span class='line'>default_days      = 10950 # 证书有效期，设为30年比较省心
-</span><span class='line'>policy        = policy_anything # CA资料和证书申请资料的匹配策略，改为这个比较方便
-</span><span class='line'>countryName_default       = CN # 默认国家
-</span><span class='line'>stateOrProvinceName_default       = Jiangxi # 默认省份
-</span><span class='line'>localityName_default      = Nanchang # 默认城市，在localityName = Locality Name (eg, city)下增加这一条
-</span><span class='line'>0.organizationName_default        = Kashuo # 默认组织</span></code></pre></td></tr></table></div></figure>
-
+<p>dir = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及件，后面会提
+default_days = 10950 # 证书有效期，设30年比较省心
+policy = policy_anything # CA资料和证书申请资料的匹配策略改为这个比较方便
+countryName_default =CN # 默认国家
+stateOrProvinceName_default = Jiagxi # 默认省份
+localityName_default = Nanchang # 默认城市，在localityName = Locality Name (eg,city)下增加这一条
+0.organizationName_default = Kashuo # 默认组织</p>
 
 <ol>
 <li>接着准备文件夹及文件：
@@ -238,9 +230,14 @@
 </span><span class='line'>国家/地区：CN</span></code></pre></td></tr></table></div></figure>
 
 
-<p>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在浏览网站的时候会提示证书与域名不一致。
-6. 加密服务选择RSA和1024位
-7. 最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></p>
+<pre><code>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在。浏览网站的时候会提示证书与域名不一致
+</code></pre>
+
+<ol>
+<li>加密服务选择RSA和1024位</li>
+<li>最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></li>
+</ol>
+
 
 <h3>第五步：签发服务器证书</h3>
 
