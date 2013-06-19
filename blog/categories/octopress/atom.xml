@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | alvin hu]]></title>
+  <link href="http://alvinhu.com/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://alvinhu.com/"/>
+  <updated>2013-06-20T02:48:40+08:00</updated>
+  <id>http://alvinhu.com/</id>
+  <author>
+    <name><![CDATA[alvinhu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Octopress]]></title>
+    <link href="http://alvinhu.com/blog/2012/11/14/the-octopress/"/>
+    <updated>2012-11-14T23:38:00+08:00</updated>
+    <id>http://alvinhu.com/blog/2012/11/14/the-octopress</id>
+    <content type="html"><![CDATA[<p>一直以来都很想建个自己的blog，用来记录和分享自己在工作和生活当中一些东西。</p>
+
+<p>曾经用过QQ空间，试过WordPress，总感觉不是自己的blog，没有那种冲动和欲望去更新。</p>
+
+<p>因为在iOS开发中经常关注一些国外的同行的blog，发现他们都是用的Octopress，感觉更方面都挺不错的：清爽、代码高亮等等，非常符合自己的口味。</p>
+
+<p>进入官网看了一下，安装起来跟传统的WP之类的blog程序完全不是一条路，看着有点迷糊，而且连维护和发布都是在本地操作的，真是有点丈二和尚摸不着头脑。</p>
+
+<p>但是经过几个小时的折腾，总算是搭起来了，现在发表着第一篇blog感慨颇深啊，总算是圆了自己的一个梦，以后有地方积累自己的点点滴滴了。</p>
+
+<p>先发个简单的开篇，以后再慢慢完善吧！</p>
+]]></content>
+  </entry>
+  
+</feed>

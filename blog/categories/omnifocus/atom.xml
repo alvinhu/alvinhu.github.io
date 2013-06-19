@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: OmniFocus | alvin hu]]></title>
+  <link href="http://alvinhu.com/blog/categories/omnifocus/atom.xml" rel="self"/>
+  <link href="http://alvinhu.com/"/>
+  <updated>2013-06-20T02:48:40+08:00</updated>
+  <id>http://alvinhu.com/</id>
+  <author>
+    <name><![CDATA[alvinhu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何修复OmniFocus中的剪辑快捷键]]></title>
+    <link href="http://alvinhu.com/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/"/>
+    <updated>2013-05-29T03:25:00+08:00</updated>
+    <id>http://alvinhu.com/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut</id>
+    <content type="html"><![CDATA[<p>最近在学习使用OmniFocus进行时间管理，根据网上GTD和OmniFocus教程开始入手。
+软件安装完了以后进行一些基本设置的时候发现一个小问题：在<code>剪辑预置</code>中的<code>剪辑快捷键（Quick Clippings Shortcut）</code>不论如何设置都无法正常使用。
+我的系统是10.8.3，不知道这个是我的个例还是普遍的bug。
+最后总算找到了解决办法，如果你也正好碰到这个问题，不妨试试下面的步骤：</p>
+
+<ol>
+<li>关闭OmniFocus</li>
+<li>打开<code>系统偏好设置</code>，进入<code>键盘</code>设置，选择<code>键盘快捷键</code></li>
+<li>在左边栏中选择<code>服务</code></li>
+<li>向下滚动到<code>文本</code>，里面有一个<code>OmniFocus：发送到收件箱</code></li>
+<li>选中它，然后点击右边的<code>添加快捷键</code>分配你喜欢的快捷方式就可以了。我设置的是<code>Shift-Command-X</code>。</li>
+</ol>
+
+
+<p><img src="/images/quick-clippings-shortcut.jpg" alt="截图" /></p>
+]]></content>
+  </entry>
+  
+</feed>

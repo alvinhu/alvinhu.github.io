@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iOS | alvin hu]]></title>
+  <link href="http://alvinhu.com/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://alvinhu.com/"/>
+  <updated>2013-06-20T02:48:40+08:00</updated>
+  <id>http://alvinhu.com/</id>
+  <author>
+    <name><![CDATA[alvinhu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[快速简单自定义UINavigationController中返回按钮的样式和文字]]></title>
+    <link href="http://alvinhu.com/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller/"/>
+    <updated>2012-11-28T17:40:00+08:00</updated>
+    <id>http://alvinhu.com/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller</id>
+    <content type="html"><![CDATA[<p>在开发iPhone应用程序的时候，很多时候都会用到UINavigationController，其中的返回按钮（Back Button）里的文字会自动调用前一个UIViewController的标题。而且在早期iOS版本的时候想自定义返回按钮比较麻烦。好在iOS5出来以后提供了UIAppearance以方便开发者自定义iOS的风格样式，这个时候自定义返回按钮的样式就比较容易了：</p>
+
+<p>``` objc
+&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
+{</p>
+
+<pre><code>// 自定义UIBarButtonItem返回按钮背景图片
+UIImage *backButton = [[UIImage imageNamed:@"BackButton.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15.0, 0, 5.0)];
+UIImage *backButtonHighlighted = [[UIImage imageNamed:@"BackButtonHighlighted.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15.0, 0, 5.0)];
+[[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+[[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonHighlighted forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+
+// 自定义UIBarButtonItem返回按钮标题文字位置
+[[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-1.0, 0) forBarMetrics:UIBarMetricsDefault];
+
+return YES;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>上面的代码自定义了返回按钮的样式。</p>
+
+<p>如果我们想把返回按钮里面的文字改成<code>返回</code>，简单的办法就是：</p>
+
+<p>``` objc
+&ndash; (void)viewDidLoad
+{</p>
+
+<pre><code>[super viewDidLoad];
+
+UIBarButtonItem *backButton = [[UIBarButtonItem alloc] init];
+backButton.title = @"返回";
+self.navigationItem.backBarButtonItem = backButton;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>这里我们假设打开了ARC，所以不需要<code>[backButton release]</code>。</p>
+
+<p>上面的办法只是一次性定义返回按钮的文字，如果需要把所有返回按钮的文字都改成<code>返回</code>，那就需要用到<code>Category</code>：</p>
+
+<p>``` objc UINavigationItem+MyBackButton.h
+@interface UINavigationItem (MyBackButton)</p>
+
+<p>@end
+```</p>
+
+<p>``` objc UINavigationItem+MyBackButton.m</p>
+
+<h1>import &ldquo;UINavigationItem+MyBackButton.h&rdquo;</h1>
+
+<p>@implementation UINavigationItem (MyBackButton)</p>
+
+<ul>
+<li>(UIBarButtonItem *)backBarButtonItem
+{
+  return [[UIBarButtonItem alloc] initWithTitle:@&ldquo;返回&rdquo; style:UIBarButtonItemStylePlain target:nil action:nil];
+}
+@end
+```</li>
+</ul>
+
+
+<p>把上面两个文件拖到项目里面就可以了。是不是很简单！</p>
+]]></content>
+  </entry>
+  
+</feed>

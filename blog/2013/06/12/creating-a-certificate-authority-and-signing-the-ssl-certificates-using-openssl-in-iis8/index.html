@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>IIS8中使用OpenSSL来创建CA并且签发SSL证书 - alvin hu</title>
+  <meta name="author" content="alvinhu">
+
+  
+  <meta name="description" content="IIS8中使用OpenSSL来创建CA并且签发SSL证书">
+  <meta name="keywords" content="IIS8, OpenSSL, CA, SSL, certificate, sign, 证书, 签名">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alvinhu.com/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="alvin hu" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41589843-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">alvin hu</a></h1>
+  
+    <h2>A blog of iOS developer.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:alvinhu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">IIS8中使用OpenSSL来创建CA并且签发SSL证书</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T00:49:00+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+         | <a href="#duoshuo_comment">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>最近在为新的iOS app考虑安全机制，第一个进入脑海里的就是HTTPS和SSL。所以研究了一下Windows服务器下IIS部署HTTPS和证书的方法，以及如何让app与server进行安全的信息交互。</p>
+
+<p>由于网上千篇一律的只是教大家怎么怎么操作，并没有告诉大家为什么这么操作。而作为一个喜欢打破砂锅问到底的强迫症患者，自己又花了一些时间研究了各个步骤及参数的原理，在这里把这些小小的理解及经验记录下来，即给有同样需求的同行们做个参考，也给未来的自己留作备份。</p>
+
+<h2>申明</h2>
+
+<p>本人并非互联网安全专家，也不是OpenSSL老手。如果这篇文章对你有用，本人非常高兴。如果无法解决问题，你可以google其他更加专业的文章，我相信只要花点时间肯定能够找到答案。本文中所有步骤都经过本人多次测试，但不能保证一定正确，在此仅供参考。如有不对之处，欢迎留言探讨及指正。</p>
+
+<h2>准备</h2>
+
+<ul>
+<li>Windows 8 + IIS 8</li>
+<li>直接下载编译好的<a href="http://slproweb.com/products/Win32OpenSSL.html">OpenSSL</a>，由于我的系统是64位的，所以我下的是最新版的<strong>Win64 OpenSSL v1.0.1e Light</strong></li>
+<li>安装OpenSSL之前要先装<strong>Visual C++ 2008 SP1 Redistributables</strong>，根据系统选择<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=5582">32位</a>的和<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=2092">64位</a>下载并安装</li>
+</ul>
+
+
+<h2>开始</h2>
+
+<h3>第一步：安装OpenSSL</h3>
+
+<ol>
+<li>尽管我们已经安装了<strong>Visual C++ 2008 SP1 Redistributables</strong>，安装刚开始还是会提示未安装<strong>Visual C++ 2008 Redistributables</strong>，不管它直接点击确定</li>
+<li>一路下一步就可以了，安装文件夹我选择<strong>C:\OpenSSL</strong></li>
+<li>在<strong>Copy OpenSSL DLLs to:</strong>的地方我选择<strong>The OpenSSL binaries (/bin) directory</strong>，我不喜欢把什么DLL都往Windows目录丢，这样放在应用程序目录下比较干净</li>
+<li>完成安装</li>
+</ol>
+
+
+<h3>第二步：配置OpenSSL</h3>
+
+<ol>
+<li>将路径<strong>C:\OpenSSL\bin\</strong>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</li>
+<li>打开openssl.cfg，修改一下配置：</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dir      = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及文件，后面会提
+</span><span class='line'>default_days      = 10950 # 证书有效期，设为30年比较省心
+</span><span class='line'>policy        = policy_anything # CA资料和证书申请资料的匹配策略，改为这个比较方便
+</span><span class='line'>countryName_default       = CN # 默认国家
+</span><span class='line'>stateOrProvinceName_default       = Jiangxi # 默认省份
+</span><span class='line'>localityName_default      = Nanchang # 默认城市，在localityName = Locality Name (eg, city)下增加这一条
+</span><span class='line'>0.organizationName_default        = Kashuo # 默认组织</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>接着准备文件夹及文件：
+
+<ul>
+<li>新建文件夹<strong>C:\OpenSSL\bin\KashuoCA</strong></li>
+<li>新建文件夹<strong>C:\OpenSSL\bin\KashuoCA\newcerts</strong></li>
+<li>新建文件<strong>C:\OpenSSL\bin\KashuoCA\serial</strong>（无后缀名），里面写入<code>01</code>，用来存放签发证书流水号</li>
+<li>新建空文件<strong>C:\OpenSSL\bin\KashuoCA\index.txt</strong>，用来存放签发证书记录</li>
+</ul>
+</li>
+<li>为了省去每次运行命令都要指定openssl.cfg的麻烦，打开命令提示符（cmd.exe），将cfg文件设为系统变量：</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set OPENSSL_CONF=C:\OpenSSL\bin\openssl.cfg</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>重新打开命令提示符，进入KashuoCA文件夹：<code>cd C:\OpenSSL\bin\KashuoCA</code>，准备好以后开始下面的步骤</li>
+</ol>
+
+
+<h3>第三步：建立CA</h3>
+
+<p>命令：<code>openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer</code>
+参数：
+<strong>req</strong> # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
+<strong>-x509</strong> # 有这个参数就是生成CA根证书，没有就是生成证书申请文件
+<strong>-newkey rsa:1024</strong> # 同时生成1024位RSA算法的私钥
+<strong>-keyout</strong> # CA私钥
+<strong>-out</strong> # 证书申请文件或CA根证书
+由于我们之前已经设置了证书有效期和cfg文件的地址，所以在命令里就不需要重复设置了</p>
+
+<p>运行命令以后会要求输入私钥密码，并且再输入一次确认密码。在输入国家省份等资料的时候直接回车使用之前我们设置的默认值就可以了，但是在<strong>Organizational Unit Name</strong>、<strong>Common Name</strong>和<strong>Email Address</strong>三个地方没有设置默认值，因为这三个资料在CA证书和服务器证书里是不一样的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>C:\OpenSSL\bin\KashuoCA&gt;openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cerLoading 'screen' into random state - doneGenerating a 1024 bit RSA private key...........++++++.........................++++++writing new private key to 'ca.key'Enter PEM pass phrase:Verifying - Enter PEM pass phrase:-----You are about to be asked to enter information that will be incorporatedinto your certificate request.What you are about to enter is what is called a Distinguished Name or a DN.There are quite a few fields but you can leave some blankFor some fields there will be a default value,If you enter '.', the field will be left blank.-----Country Name (2 letter code) [CN]:State or Province Name (full name) [Jiangxi]:Locality Name (eg, city) [Nanchang]:Organization Name (eg, company) [Kashuo]:Organizational Unit Name (eg, section) []:KashuoCACommon Name (e.g. server FQDN or YOUR name) []:KashuoCAEmail Address []:ca@kashuo.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这时候我们就有了CA根证书和私钥了！</p>
+
+<h3>第四步：通过IIS生成证书申请文件</h3>
+
+<p>由于本例中证书文件是部署在IIS中，所以通过IIS直接生成证书文件会比较方便。当然第二步中提到了通过OpenSSL的req方法也可以生成证书申请文件。</p>
+
+<ol>
+<li>打开<strong>IIS</strong></li>
+<li>在左侧<strong>连接</strong>中选择服务器</li>
+<li>在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>服务器证书</strong></li>
+<li>在右侧<strong>操作</strong>中选择<strong>创建证书申请</strong></li>
+<li>在打开的窗口中填入以下信息：</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>通用名称：www.kashuo.com
+</span><span class='line'>组织：Kashuo
+</span><span class='line'>组织单位：KashuoServer
+</span><span class='line'>城市/地点：Nanchang
+</span><span class='line'>省/市/自治区：Jiangxi
+</span><span class='line'>国家/地区：CN</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在浏览网站的时候会提示证书与域名不一致。
+6. 加密服务选择RSA和1024位
+7. 最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></p>
+
+<h3>第五步：签发服务器证书</h3>
+
+<p>现在，CA证书文件ca.cer、CA私钥ca.key、服务器证书申请certreq.txt三个文件都在KashuoCA文件夹下</p>
+
+<p>命令：<code>openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer</code>
+参数：
+<strong>ca</strong> # 主要用来签发证书申请
+<strong>-in</strong> # 证书申请文件
+<strong>-cert</strong> # CA证书
+<strong>-keyfile</strong> # CA私钥
+<strong>-out</strong> # 签发的证书</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cerUsing configuration from C:\OpenSSL\bin\openssl.cfgLoading 'screen' into random state - doneEnter pass phrase for ca.key:Check that the request matches the signatureSignature okCertificate Details:        Serial Number: 1 (0x1)        Validity            Not Before: Jun 13 10:32:25 2013 GMT            Not After : Jun  6 10:32:25 2043 GMT        Subject:            countryName               = CN            stateOrProvinceName       = Jiangxi            localityName              = Nanchang            organizationName          = Kashuo            organizationalUnitName    = KashuoServer            commonName                = www.kashuo.com        X509v3 extensions:            X509v3 Basic Constraints:                CA:FALSE            Netscape Comment:                OpenSSL Generated Certificate            X509v3 Subject Key Identifier:                E0:8A:69:4A:D1:0A:98:26:EA:AE:AF:5E:6D:A7:A7:C4:DE:07:13:DF            X509v3 Authority Key Identifier:                keyid:37:48:69:62:0E:FD:FB:1E:83:EB:DE:2D:0D:F6:55:C1:E1:76:EF:BACertificate is to be certified until Jun  6 10:32:25 2043 GMT (10950 days)Sign the certificate? [y/n]:y1 out of 1 certificate requests certified, commit? [y/n]yWrite out database with 1 new entriesData Base Updated</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后我们得到了服务器证书<strong>iis.cer</strong></p>
+
+<h3>第六步：在服务器上导入CA根证书</h3>
+
+<p>由于第三步生成的CA根证书是自签名的，并非由系统可以识别的第三方信任机构签发，所以需要将CA根证书导入到服务器中。</p>
+
+<ol>
+<li>双击<strong>ca.cer</strong>打开证书详情</li>
+<li>点击<strong>安装证书</strong>打开<strong>证书导入向导</strong></li>
+<li>存储位置选择<strong>本地计算机</strong>然后下一步</li>
+<li>选择<strong>将所有的证书都放入下列存储</strong></li>
+<li>点击浏览，选择<strong>受信任的根证据颁发机构</strong></li>
+<li>导入完成</li>
+</ol>
+
+
+<h3>第七步：完成IIS证书申请</h3>
+
+<p>现在可以将第五步生成的<strong>iis.cer</strong>导入到IIS中了：</p>
+
+<ol>
+<li>点击第四步<strong>创建证书申请</strong>下方的<strong>完成证书申请</strong></li>
+<li>选择证书文件：<strong>C:\OpenSSL\bin\KashuoCA\iis.cer</strong></li>
+<li>输入一个好记名称，如<strong>www.kashuo.com</strong></li>
+<li>证书存储默认为<strong>个人</strong>不变</li>
+<li>点击确定完成证书导入</li>
+</ol>
+
+
+<p>这个时候在服务器证书列表里就可以看到这个证书了。</p>
+
+<h3>第八步：打开网站的SSL设置</h3>
+
+<p>安装好IIS证书以后就可以打开网站的SSL设置了：</p>
+
+<ol>
+<li>在IIS左侧<strong>连接</strong>中选择<strong>网站</strong></li>
+<li>在右侧<strong>操作</strong>中点击<strong>绑定</strong></li>
+<li>在打开的<strong>网站绑定</strong>中添加一条记录：
+
+<ul>
+<li><strong>类型</strong>选择<strong>https</strong></li>
+<li><strong>主机名</strong>填写绑定的域名，如<strong>www.kashuo.com</strong></li>
+<li><strong>证书</strong>就选择我们刚刚添加的证书</li>
+<li>确定完成</li>
+</ul>
+</li>
+<li>然后在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>SSL设置</strong>，这里根据自己的需求进行设置
+
+<ul>
+<li><strong>要求SSL</strong>：勾选以后只能通过https访问，否则http和https都可以访问</li>
+<li><strong>客户证书</strong>：
+
+<ul>
+<li>忽略：不论客户端有没有证书都不检验</li>
+<li>接受：如果客户端没有证书就不检验，否则弹出提示框让用户选择证书并检验证书合法性</li>
+<li>必需：客户端必需提供合法证书才能进行访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>设置完成以后点击右边<strong>应用</strong>就可以了</li>
+</ol>
+
+
+<p>对于单向认证SSL连接，在<strong>客户证书</strong>里选择<strong>忽略</strong>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
+
+<p>如果对于安全性要求很高的网站，需要使用双向认证SSL连接，在<strong>客户证书</strong>里就要选择<strong>必需</strong>，即服务端和客户端互相检验证书合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">alvinhu</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T00:49:00+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/openssl/'>OpenSSL</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/" data-via="" data-counturl="http://alvinhu.com/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/" title="Previous Post: 如何修复OmniFocus中的剪辑快捷键">&laquo; 如何修复OmniFocus中的剪辑快捷键</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="duoshuo_comment" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"alvinhu"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+<!-- Duoshuo Comment END --></div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/omnifocus/'>OmniFocus (1)</a></li>
+<li class='category'><a href='/blog/categories/openssl/'>OpenSSL (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (1)</a></li>
+
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/">IIS8中使用OpenSSL来创建CA并且签发SSL证书</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/">如何修复OmniFocus中的剪辑快捷键</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller/">快速简单自定义UINavigationController中返回按钮的样式和文字</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/28/about-mac-os-x-secondary-click/">关于Mac OS X右键菜单</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/14/the-octopress/">The Octopress</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Recent Comments</h1>
+  <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="0" data-show-admin="1" data-excerpt-length="70"></ul>
+  <!--多说js加载开始，一个页面只需要加载一次 -->
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alvinhu"};
+    function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+  <!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - alvinhu -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
