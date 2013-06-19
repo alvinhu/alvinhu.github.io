@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T04:57:38+08:00</updated>
+  <updated>2013-06-20T05:01:08+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -55,14 +55,12 @@
 
 <p>如果需要清理菜单重复项和无效的关联，可以在终端运行下面命令，在本地、系统和用户空间上，重建LS数据库：</p>
 
-<p><code>
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
-</code></p>
+<pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+</code></pre>
 
 <p>lsregister命令参数如下：</p>
 
-<p><code>
--kill：重置全局LS数据库(最先执行)
+<pre><code>-kill：重置全局LS数据库(最先执行)
 -lint：打印详细应用程序文件关联注册中的错误信息
 -convert：将老数据库中的信息注册到新的LS数据库
 -load：加载LS插件
@@ -73,7 +71,7 @@
 -v：输出lsregister运行详细信息
 -dump：在注册完成后显示数据库内容
 -h：显示此帮助
-</code></p>
+</code></pre>
 ]]></content>
   </entry>
   

@@ -151,35 +151,23 @@
 
 <p>如果需要清理菜单重复项和无效的关联，可以在终端运行下面命令，在本地、系统和用户空间上，重建LS数据库：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+</code></pre>
 
 <p>lsregister命令参数如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-kill：重置全局LS数据库(最先执行)
-</span><span class='line'>-lint：打印详细应用程序文件关联注册中的错误信息
-</span><span class='line'>-convert：将老数据库中的信息注册到新的LS数据库
-</span><span class='line'>-load：加载LS插件
-</span><span class='line'>-lazy n：指定一个注册等待时间
-</span><span class='line'>-r：递归的查找文件夹内容以做关联之用（不包括pkg类型文件和隐藏文件夹下的内容）
-</span><span class='line'>-R：递归的查找文件夹内容以做关联之用（包括pkg类型文件和隐藏文件夹下的内容）
-</span><span class='line'>-f：强制更新所有对应注册信息
-</span><span class='line'>-v：输出lsregister运行详细信息
-</span><span class='line'>-dump：在注册完成后显示数据库内容
-</span><span class='line'>-h：显示此帮助</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>-kill：重置全局LS数据库(最先执行)
+-lint：打印详细应用程序文件关联注册中的错误信息
+-convert：将老数据库中的信息注册到新的LS数据库
+-load：加载LS插件
+-lazy n：指定一个注册等待时间
+-r：递归的查找文件夹内容以做关联之用（不包括pkg类型文件和隐藏文件夹下的内容）
+-R：递归的查找文件夹内容以做关联之用（包括pkg类型文件和隐藏文件夹下的内容）
+-f：强制更新所有对应注册信息
+-v：输出lsregister运行详细信息
+-dump：在注册完成后显示数据库内容
+-h：显示此帮助
+</code></pre>
 </div>
 
 
