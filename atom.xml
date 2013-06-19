@@ -4,7 +4,7 @@
   <title><![CDATA[alvin hu]]></title>
   <link href="http://alvinhu.com/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T03:59:44+08:00</updated>
+  <updated>2013-06-20T04:01:18+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -116,28 +116,14 @@ localityName_default = Nanchang # 默认城市，在localityName = Locality Name
 <li>在左侧<strong>连接</strong>中选择服务器</li>
 <li>在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>服务器证书</strong></li>
 <li>在右侧<strong>操作</strong>中选择<strong>创建证书申请</strong></li>
-<li>在打开的窗口中填入以下信息：</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>通用名称：www.kashuo.com
-</span><span class='line'>组织：Kashuo
-</span><span class='line'>组织单位：KashuoServer
-</span><span class='line'>城市/地点：Nanchang
-</span><span class='line'>省/市/自治区：Jiangxi
-</span><span class='line'>国家/地区：CN</span></code></pre></td></tr></table></div></figure>
-
-
-<pre><code>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在。浏览网站的时候会提示证书与域名不一致
-</code></pre>
-
-<ol>
+<li>在打开的窗口中填入以下信息：
+ 通用名称：www.kashuo.com
+ 组织：Kashuo
+ 组织单位：KashuoServer
+ 城市/地点：Nanchang
+ 省/市/自治区：Jiangxi
+ 国家/地区：CN
+通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在。浏览网站的时候会提示证书与域名不一致</li>
 <li>加密服务选择RSA和1024位</li>
 <li>最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></li>
 </ol>
