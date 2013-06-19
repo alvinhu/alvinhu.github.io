@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OmniFocus | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/omnifocus/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T04:01:18+08:00</updated>
+  <updated>2013-06-20T04:57:38+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -28,7 +28,7 @@
 <li>打开<code>系统偏好设置</code>，进入<code>键盘</code>设置，选择<code>键盘快捷键</code></li>
 <li>在左边栏中选择<code>服务</code></li>
 <li>向下滚动到<code>文本</code>，里面有一个<code>OmniFocus：发送到收件箱</code></li>
-<li>选中它，然后点击右边的<code>添加快捷键</code>分配你喜欢的快捷方式就可以了。我设置的是<code>Shift-Command-X</code>。</li>
+<li>选中它，然后点击右边的<code>添加快捷键</code>分配你喜欢的快捷方式就可以了。我设置的是<code>Shift-Command-X</code></li>
 </ol>
 
 

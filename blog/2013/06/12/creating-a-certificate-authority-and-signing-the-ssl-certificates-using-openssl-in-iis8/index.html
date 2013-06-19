@@ -147,22 +147,20 @@
 
 <h3>第二步：配置OpenSSL</h3>
 
-<ol>
-<li>将路径<strong>C:\OpenSSL\bin\</strong>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</li>
-<li>打开openssl.cfg，修改一下配置：</li>
-</ol>
+<p>1、将路径<strong>C:\OpenSSL\bin\</strong>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</p>
 
+<p>2、打开openssl.cfg，修改一下配置：</p>
 
-<p>dir = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及件，后面会提
+<pre><code>dir = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及件，后面会提到
 default_days = 10950 # 证书有效期，设30年比较省心
 policy = policy_anything # CA资料和证书申请资料的匹配策略改为这个比较方便
-countryName_default =CN # 默认国家
+countryName_default = CN # 默认国家
 stateOrProvinceName_default = Jiagxi # 默认省份
 localityName_default = Nanchang # 默认城市，在localityName = Locality Name (eg,city)下增加这一条
-0.organizationName_default = Kashuo # 默认组织</p>
+0.organizationName_default = Kashuo # 默认组织
+</code></pre>
 
-<ol>
-<li>接着准备文件夹及文件：
+<p>3、接着准备文件夹及文件：</p>
 
 <ul>
 <li>新建文件夹<strong>C:\OpenSSL\bin\KashuoCA</strong></li>
@@ -170,36 +168,67 @@ localityName_default = Nanchang # 默认城市，在localityName = Locality Name
 <li>新建文件<strong>C:\OpenSSL\bin\KashuoCA\serial</strong>（无后缀名），里面写入<code>01</code>，用来存放签发证书流水号</li>
 <li>新建空文件<strong>C:\OpenSSL\bin\KashuoCA\index.txt</strong>，用来存放签发证书记录</li>
 </ul>
-</li>
-<li>为了省去每次运行命令都要指定openssl.cfg的麻烦，打开命令提示符（cmd.exe），将cfg文件设为系统变量：</li>
-</ol>
 
+
+<p>4、为了省去每次运行命令都要指定openssl.cfg的麻烦，打开命令提示符（cmd.exe），将cfg文件设为系统变量：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>set OPENSSL_CONF=C:\OpenSSL\bin\openssl.cfg</span></code></pre></td></tr></table></div></figure>
 
 
-<ol>
-<li>重新打开命令提示符，进入KashuoCA文件夹：<code>cd C:\OpenSSL\bin\KashuoCA</code>，准备好以后开始下面的步骤</li>
-</ol>
+<p>5、重新打开命令提示符，进入KashuoCA文件夹：</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd C:\OpenSSL\bin\KashuoCA</span></code></pre></td></tr></table></div></figure>
+
+
+<p>准备好以后开始下面的步骤</p>
 
 <h3>第三步：建立CA</h3>
 
-<p>命令：<code>openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer</code>
-参数：
-<strong>req</strong> # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
-<strong>-x509</strong> # 有这个参数就是生成CA根证书，没有就是生成证书申请文件
-<strong>-newkey rsa:1024</strong> # 同时生成1024位RSA算法的私钥
-<strong>-keyout</strong> # CA私钥
-<strong>-out</strong> # 证书申请文件或CA根证书
-由于我们之前已经设置了证书有效期和cfg文件的地址，所以在命令里就不需要重复设置了</p>
+<p>命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参数：</p>
+
+<pre><code>req # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
+-x509 # 有这个参数就是生成CA根证书，没有就是生成证书申请文件
+-newkey rsa:1024 # 同时生成1024位RSA算法的私钥
+-keyout # CA私钥
+-out # 证书申请文件或CA根证书
+</code></pre>
+
+<p>由于我们之前已经设置了证书有效期和cfg文件的地址，所以在命令里就不需要重复设置了</p>
 
 <p>运行命令以后会要求输入私钥密码，并且再输入一次确认密码。在输入国家省份等资料的时候直接回车使用之前我们设置的默认值就可以了，但是在<strong>Organizational Unit Name</strong>、<strong>Common Name</strong>和<strong>Email Address</strong>三个地方没有设置默认值，因为这三个资料在CA证书和服务器证书里是不一样的。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>C:\OpenSSL\bin\KashuoCA&gt;openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cerLoading 'screen' into random state - doneGenerating a 1024 bit RSA private key...........++++++.........................++++++writing new private key to 'ca.key'Enter PEM pass phrase:Verifying - Enter PEM pass phrase:-----You are about to be asked to enter information that will be incorporatedinto your certificate request.What you are about to enter is what is called a Distinguished Name or a DN.There are quite a few fields but you can leave some blankFor some fields there will be a default value,If you enter '.', the field will be left blank.-----Country Name (2 letter code) [CN]:State or Province Name (full name) [Jiangxi]:Locality Name (eg, city) [Nanchang]:Organization Name (eg, company) [Kashuo]:Organizational Unit Name (eg, section) []:KashuoCACommon Name (e.g. server FQDN or YOUR name) []:KashuoCAEmail Address []:ca@kashuo.com</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer
+Loading 'screen' into random state - done
+Generating a 1024 bit RSA private key
+...........++++++
+.........................++++++
+writing new private key to 'ca.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [CN]:
+State or Province Name (full name) [Jiangxi]:
+Locality Name (eg, city) [Nanchang]:
+Organization Name (eg, company) [Kashuo]:
+Organizational Unit Name (eg, section) []:KashuoCA
+Common Name (e.g. server FQDN or YOUR name) []:KashuoCA
+Email Address []:ca@kashuo.com
+</code></pre>
 
 <p>这时候我们就有了CA根证书和私钥了！</p>
 
@@ -207,39 +236,87 @@ localityName_default = Nanchang # 默认城市，在localityName = Locality Name
 
 <p>由于本例中证书文件是部署在IIS中，所以通过IIS直接生成证书文件会比较方便。当然第二步中提到了通过OpenSSL的req方法也可以生成证书申请文件。</p>
 
-<ol>
-<li>打开<strong>IIS</strong></li>
-<li>在左侧<strong>连接</strong>中选择服务器</li>
-<li>在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>服务器证书</strong></li>
-<li>在右侧<strong>操作</strong>中选择<strong>创建证书申请</strong></li>
-<li>在打开的窗口中填入以下信息：
- 通用名称：www.kashuo.com
- 组织：Kashuo
- 组织单位：KashuoServer
- 城市/地点：Nanchang
- 省/市/自治区：Jiangxi
- 国家/地区：CN
-通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在。浏览网站的时候会提示证书与域名不一致</li>
-<li>加密服务选择RSA和1024位</li>
-<li>最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></li>
-</ol>
+<p>1、打开<strong>IIS</strong></p>
 
+<p>2、在左侧<strong>连接</strong>中选择服务器</p>
+
+<p>3、在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>服务器证书</strong></p>
+
+<p>4、在右侧<strong>操作</strong>中选择<strong>创建证书申请</strong></p>
+
+<p>5、在打开的窗口中填入以下信息：</p>
+
+<pre><code>通用名称：www.kashuo.com
+组织：Kashuo
+组织单位：KashuoServer
+城市/地点：Nanchang
+省/市/自治区：Jiangxi
+国家/地区：CN
+</code></pre>
+
+<p>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在浏览网站的时候会提示证书与域名不一致</p>
+
+<p>6、加密服务选择RSA和1024位</p>
+
+<p>7、最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></p>
 
 <h3>第五步：签发服务器证书</h3>
 
 <p>现在，CA证书文件ca.cer、CA私钥ca.key、服务器证书申请certreq.txt三个文件都在KashuoCA文件夹下</p>
 
-<p>命令：<code>openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer</code>
-参数：
-<strong>ca</strong> # 主要用来签发证书申请
-<strong>-in</strong> # 证书申请文件
-<strong>-cert</strong> # CA证书
-<strong>-keyfile</strong> # CA私钥
-<strong>-out</strong> # 签发的证书</p>
+<p>命令：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cerUsing configuration from C:\OpenSSL\bin\openssl.cfgLoading 'screen' into random state - doneEnter pass phrase for ca.key:Check that the request matches the signatureSignature okCertificate Details:        Serial Number: 1 (0x1)        Validity            Not Before: Jun 13 10:32:25 2013 GMT            Not After : Jun  6 10:32:25 2043 GMT        Subject:            countryName               = CN            stateOrProvinceName       = Jiangxi            localityName              = Nanchang            organizationName          = Kashuo            organizationalUnitName    = KashuoServer            commonName                = www.kashuo.com        X509v3 extensions:            X509v3 Basic Constraints:                CA:FALSE            Netscape Comment:                OpenSSL Generated Certificate            X509v3 Subject Key Identifier:                E0:8A:69:4A:D1:0A:98:26:EA:AE:AF:5E:6D:A7:A7:C4:DE:07:13:DF            X509v3 Authority Key Identifier:                keyid:37:48:69:62:0E:FD:FB:1E:83:EB:DE:2D:0D:F6:55:C1:E1:76:EF:BACertificate is to be certified until Jun  6 10:32:25 2043 GMT (10950 days)Sign the certificate? [y/n]:y1 out of 1 certificate requests certified, commit? [y/n]yWrite out database with 1 new entriesData Base Updated</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer</span></code></pre></td></tr></table></div></figure>
 
+
+<p>参数：</p>
+
+<pre><code>ca # 主要用来签发证书申请
+-in # 证书申请文件
+-cert # CA证书
+-keyfile # CA私钥
+-out # 签发的证书
+</code></pre>
+
+<p>运行命令以后需要输入CA的私钥密码</p>
+
+<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer
+Using configuration from C:\OpenSSL\bin\openssl.cfg
+Loading 'screen' into random state - done
+Enter pass phrase for ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 1 (0x1)
+        Validity
+            Not Before: Jun 13 10:32:25 2013 GMT
+            Not After : Jun  6 10:32:25 2043 GMT
+        Subject:
+            countryName               = CN
+            stateOrProvinceName       = Jiangxi
+            localityName              = Nanchang
+            organizationName          = Kashuo
+            organizationalUnitName    = KashuoServer
+            commonName                = www.kashuo.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier:
+                E0:8A:69:4A:D1:0A:98:26:EA:AE:AF:5E:6D:A7:A7:C4:DE:07:13:DF
+            X509v3 Authority Key Identifier:
+                keyid:37:48:69:62:0E:FD:FB:1E:83:EB:DE:2D:0D:F6:55:C1:E1:76:EF:BA
+
+Certificate is to be certified until Jun  6 10:32:25 2043 GMT (10950 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+</code></pre>
 
 <p>最后我们得到了服务器证书<strong>iis.cer</strong></p>
 
