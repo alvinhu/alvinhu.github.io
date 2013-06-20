@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenSSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/openssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T23:53:04+08:00</updated>
+  <updated>2013-06-20T23:57:13+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -433,13 +433,17 @@ Verifying - Enter Export Password:
 
 <p>在客户端电脑导入客户端证书之前需要先导入CA根证书，将第三步生成的CA根证书文件拷贝到客户端电脑里，按照第六步的流程导入CA根证书。</p>
 
-<p>接着安装客户端证书，这个就比较简单了：
-1. 双击client.p12打开证书详情
-2. 存储位置默认当前用户
-3. 输入p12文件的导出密码
-4. 根据个人需要勾选是否可导出密钥
-5. 自动选择证书存储就可以了
-6. 大功告成！</p>
+<p>接着安装客户端证书，这个就比较简单了：</p>
+
+<ol>
+<li>双击client.p12打开证书详情</li>
+<li>存储位置默认当前用户</li>
+<li>输入p12文件的导出密码</li>
+<li>根据个人需要勾选是否可导出密钥</li>
+<li>自动选择证书存储就可以了</li>
+<li>大功告成！</li>
+</ol>
+
 
 <p>当导入客户端完成以后，客户端与服务端的双向认证SSL就搞定了！</p>
 ]]></content>
