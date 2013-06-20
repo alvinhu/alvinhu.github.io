@@ -4,7 +4,7 @@
   <title><![CDATA[alvin hu]]></title>
   <link href="http://alvinhu.com/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T21:15:10+08:00</updated>
+  <updated>2013-06-20T21:29:53+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -319,9 +319,9 @@ Data Base Updated
 </ol>
 
 
-<p>对于单向认证SSL连接，在<strong>客户证书</strong>里选择<strong>忽略</strong>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
+<p>对于<a href="http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">单向认证SSL</a>连接，在<strong>客户证书</strong>里选择<strong>忽略</strong>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
 
-<p>如果对于安全性要求很高的网站，需要使用双向认证SSL连接，在<strong>客户证书</strong>里就要选择<strong>必需</strong>，即服务端和客户端互相检验证书合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
+<p>如果对于安全性要求很高的网站，需要使用<a href="http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">双向认证SSL</a>连接，在<strong>客户证书</strong>里就要选择<strong>必需</strong>，即服务端和客户端互相验证对方证书的合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
 ]]></content>
   </entry>
   
