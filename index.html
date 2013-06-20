@@ -119,30 +119,12 @@
 
   <div class="entry-content"><p>为了便于更好的认识和理解SSL协议，这里着重介绍SSL协议的握手流程。SSL协议既用到了公钥加密技术又用到了对称加密技术，对称加密技术虽然比公钥加密技术的速度快，可是公钥加密技术提供了更好的身份认证技术。SSL的握手流程非常有效的让客户端和服务器之间完成相互之间的身份认证。</p>
 
-<h3>SSL握手流程</h3>
-
-<ol>
-<li>客户端向服务器发送<strong>ClientHello</strong>消息，说明它支持的最高TLS协议版本，随机数、密码算法列表及压缩方法。</li>
-<li>服务器回复<strong>ServerHello</strong>消息，包含基于客户端<strong>ClientHello</strong>消息所选择的TLS协议版本，随机数、密码算法列表及压缩方法。服务器选择的协议版本为客户端和服务器都支持的最高版本。</li>
-<li>当双方知道了连接参数，服务器向客户端发送证书。</li>
-<li>客户端验证服务器证书的合法性，包括：服务器证书是否过期、发行服务器证书的CA是否可靠、发行CA的公钥能否正确解开服务器证书的发行CA的数字签名、服务器证书上的域名是否和服务器的实际域名相匹配。如果合法性验证没有通过，通讯将断开；如果合法性验证通过，将继续进行第5步。</li>
-<li>客户端随机产生一个用于后面通讯的“对称密码”，然后用服务器的公钥（服务器的公钥从步骤3中的服务器证书中获得）对其加密，然后将加密后的“预主密码”传给服务器。</li>
-<li>如果服务器要求客户端的身份认证（在握手过程中为可选），客户端可以建立一个随机数然后对其进行数据签名，将这个含有签名的随机数和客户端自己的证书以及加密过的“预主密码”一起传给服务器。</li>
-<li>如果服务器要求客户端的身份认证，服务器必须检验客户端证书和签名随机数的合法性，具体的合法性验证包括：客户端证书是否过期，发行客户端证书的CA是否可靠，发行CA的公钥能否正确解开客户端证书的发行CA的数字签名，检查客户端证书是否在证书废止列表（CRL）中。如果合法性验证没有通过，通讯立刻中断；如果合法性验证通过，服务器将用自己的私钥解开加密的“预主密码”，然后执行一系列步骤来产生主通讯密码（客户端也将通过同样的方法产生相同的主通讯密码）。</li>
-<li>服务器和客户端用相同的主密码即“通话密码”，一个对称密钥用于SSL协议的安全数据通讯的加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</li>
-<li>客户端向服务器发出信息，指明后面的数据通讯将使用的步骤8中的主密码为对称密钥，同时通知服务器客户端的握手过程结束。</li>
-<li>服务器向客户端发出信息，指明后面的数据通讯将使用的步骤8中的主密码为对称密钥，同时通知客户端服务器的握手过程结束。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户端和服务器开始使用相同的对称密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
-
-
-<h3>单向认证vs双向认证</h3>
-
-<p>上面所述的是<strong>双向认证SSL</strong>协议的具体通讯过程，这种情况要求服务器和客户端双方都有证书。<strong>单向认证SSL</strong>协议不需要客户端拥有CA证书，具体的流程相对于上面的步骤，只需将服务器验证客户端证书的步骤去掉，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这时候的安全就依赖于密码方案的安全。而幸运的是，目前所用的密码方案，只要通讯密钥长度足够的长，就足够的安全。这也是我们强调要求使用128位加密通讯的原因。</p>
-
-<p>一般Web应用都是采用单向认证的，原因很简单，用户数目广泛，且无需做在通讯层做用户身份验证，一般都在应用逻辑层来保证用户的合法登入。但如果是企业应用对接，情况就不一样，可能会要求对客户端（相对而言）做身份验证。这时就需要做双向认证。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -188,428 +170,12 @@
 
 <p>欢迎转载，转载请保留原文地址。</p>
 
-<h2>申明</h2>
-
-<p>本人并非互联网安全专家，也不是OpenSSL老手。如果这篇文章对你有用，本人非常高兴。如果无法解决问题，你可以google其他更专业的文章，我相信只要花点时间肯定能够找到答案。本文中所有步骤都经过本人多次测试，但不能保证一定正确，在此仅供参考。如有不对之处，欢迎留言探讨及指正。</p>
-
-<h2>准备</h2>
-
-<ul>
-<li>Windows 8 + IIS 8</li>
-<li>直接下载编译好的<a href="http://slproweb.com/products/Win32OpenSSL.html">OpenSSL</a>，由于我的系统是64位的，所以我下的是最新版的<code>Win64 OpenSSL v1.0.1e Light</code></li>
-<li>安装OpenSSL之前要先装<code>Visual C++ 2008 SP1 Redistributables</code>，根据系统选择<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=5582">32位</a>的和<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=2092">64位</a>下载并安装</li>
-</ul>
-
-
-<h2>开始</h2>
-
-<h3>第一步：安装OpenSSL</h3>
-
-<ol>
-<li>尽管我们已经安装了<code>Visual C++ 2008 SP1 Redistributables</code>，安装刚开始还是会提示未安装<code>Visual C++ 2008 Redistributables</code>，不管它直接点击确定</li>
-<li>一路下一步就可以了，安装文件夹我选择<code>C:\OpenSSL</code></li>
-<li>在<code>Copy OpenSSL DLLs to:</code>的地方我选择<code>The OpenSSL binaries (/bin) directory</code>，我不喜欢把什么DLL都往Windows目录丢，这样放在应用程序目录下比较干净</li>
-<li>完成安装</li>
-</ol>
-
-
-<h3>第二步：配置OpenSSL</h3>
-
-<p>1、将路径<code>C:\OpenSSL\bin\</code>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</p>
-
-<p>2、打开openssl.cfg，修改一下配置：</p>
-
-<pre><code>dir = . # 存放CA文件的文件夹，里面还需要手动建立子文件夹及件，后面会提到
-default_days = 10950 # 证书有效期，设30年比较省心
-policy = policy_anything # CA资料和证书申请资料的匹配策略改为这个比较方便
-countryName_default = CN # 默认国家
-stateOrProvinceName_default = Jiagxi # 默认省份
-localityName_default = Nanchang # 默认城市，在localityName = Locality Name (eg,city)下增加这一条
-0.organizationName_default = Kashuo # 默认组织
-</code></pre>
-
-<p>3、接着准备文件夹及文件：</p>
-
-<ul>
-<li>新建文件夹<code>C:\OpenSSL\bin\KashuoCA</code></li>
-<li>新建文件夹<code>C:\OpenSSL\bin\KashuoCA\newcerts</code></li>
-<li>新建文件<code>C:\OpenSSL\bin\KashuoCA\serial</code>（无后缀名），里面写入<code>01</code>，用来存放签发证书流水号</li>
-<li>新建空文件<code>C:\OpenSSL\bin\KashuoCA\index.txt</code>，用来存放签发证书记录</li>
-</ul>
-
-
-<p>4、为了省去每次运行命令都要指定openssl.cfg的麻烦，打开命令提示符（cmd.exe），将cfg文件设为系统变量：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>set OPENSSL_CONF=C:\OpenSSL\bin\openssl.cfg</span></code></pre></td></tr></table></div></figure>
-
-
-<p>5、重新打开命令提示符，进入KashuoCA文件夹：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd C:\OpenSSL\bin\KashuoCA</span></code></pre></td></tr></table></div></figure>
-
-
-<p>准备好以后开始下面的步骤</p>
-
-<h3>第三步：建立CA</h3>
-
-<p>命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参数：</p>
-
-<pre><code>req # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
--x509 # 有这个参数就是生成CA根证书，没有就是生成证书申请文件
--newkey rsa:1024 # 同时生成1024位RSA算法的私钥
--keyout # CA私钥
--out # 证书申请文件或CA根证书
-</code></pre>
-
-<p>由于我们之前已经设置了证书有效期和cfg文件的地址，所以在命令里就不需要重复设置了</p>
-
-<p>运行命令以后会要求输入私钥密码，并且再输入一次确认密码。在输入国家省份等资料的时候直接回车使用之前我们设置的默认值就可以了，但是在<code>Organizational Unit Name</code>、<code>Common Name</code>和<code>Email Address</code>三个地方没有设置默认值，因为这三个资料在CA证书和服务器证书里是不一样的。</p>
-
-<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer
-Loading 'screen' into random state - done
-Generating a 1024 bit RSA private key
-...........++++++
-.........................++++++
-writing new private key to 'ca.key'
-Enter PEM pass phrase:
-Verifying - Enter PEM pass phrase:
------
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [CN]:
-State or Province Name (full name) [Jiangxi]:
-Locality Name (eg, city) [Nanchang]:
-Organization Name (eg, company) [Kashuo]:
-Organizational Unit Name (eg, section) []:KashuoCA
-Common Name (e.g. server FQDN or YOUR name) []:KashuoCA
-Email Address []:ca@kashuo.com
-</code></pre>
-
-<p>这时候我们就有了CA根证书和私钥了！</p>
-
-<h3>第四步：通过IIS生成证书申请文件</h3>
-
-<p>由于本例中证书文件是部署在IIS中，所以通过IIS直接生成证书文件会比较方便。当然第二步中提到了通过OpenSSL的req方法也可以生成证书申请文件。</p>
-
-<p>1、打开<code>IIS</code></p>
-
-<p>2、在左侧<code>连接</code>中选择服务器</p>
-
-<p>3、在中间<code>主页</code>里的<code>IIS</code>中选择<code>服务器证书</code></p>
-
-<p>4、在右侧<code>操作</code>中选择<code>创建证书申请</code></p>
-
-<p>5、在打开的窗口中填入以下信息：</p>
-
-<pre><code>通用名称：www.kashuo.com
-组织：Kashuo
-组织单位：KashuoServer
-城市/地点：Nanchang
-省/市/自治区：Jiangxi
-国家/地区：CN
-</code></pre>
-
-<p>通用名称里填写的域名要与该证书所绑定的网站域名一致，否则用户在浏览网站的时候会提示证书与域名不一致</p>
-
-<p>6、加密服务选择RSA和1024位</p>
-
-<p>7、最后保存证书申请的文件为<code>C:\OpenSSL\bin\KashuoCA\certreq.txt</code></p>
-
-<h3>第五步：签发服务器证书</h3>
-
-<p>现在，CA证书文件ca.cer、CA私钥ca.key、服务器证书申请certreq.txt三个文件都在KashuoCA文件夹下</p>
-
-<p>命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参数：</p>
-
-<pre><code>ca # 主要用来签发证书申请
--in # 证书申请文件
--cert # CA证书
--keyfile # CA私钥
--out # 签发的证书
-</code></pre>
-
-<p>运行命令以后需要输入CA的私钥密码</p>
-
-<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in certreq.txt -cert ca.cer -keyfile ca.key -out iis.cer
-Using configuration from C:\OpenSSL\bin\openssl.cfg
-Loading 'screen' into random state - done
-Enter pass phrase for ca.key:
-Check that the request matches the signature
-Signature ok
-Certificate Details:
-        Serial Number: 1 (0x1)
-        Validity
-            Not Before: Jun 13 10:32:25 2013 GMT
-            Not After : Jun  6 10:32:25 2043 GMT
-        Subject:
-            countryName               = CN
-            stateOrProvinceName       = Jiangxi
-            localityName              = Nanchang
-            organizationName          = Kashuo
-            organizationalUnitName    = KashuoServer
-            commonName                = www.kashuo.com
-        X509v3 extensions:
-            X509v3 Basic Constraints:
-                CA:FALSE
-            Netscape Comment:
-                OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
-                E0:8A:69:4A:D1:0A:98:26:EA:AE:AF:5E:6D:A7:A7:C4:DE:07:13:DF
-            X509v3 Authority Key Identifier:
-                keyid:37:48:69:62:0E:FD:FB:1E:83:EB:DE:2D:0D:F6:55:C1:E1:76:EF:BA
-
-Certificate is to be certified until Jun  6 10:32:25 2043 GMT (10950 days)
-Sign the certificate? [y/n]:y
-
-
-1 out of 1 certificate requests certified, commit? [y/n]y
-Write out database with 1 new entries
-Data Base Updated
-</code></pre>
-
-<p>最后我们得到了服务器证书<code>iis.cer</code></p>
-
-<h3>第六步：在服务器上导入CA根证书</h3>
-
-<p>由于第三步生成的CA根证书是自签名的，并非由系统可以识别的第三方信任机构签发，所以需要将CA根证书导入到服务器中。</p>
-
-<ol>
-<li>双击<code>ca.cer</code>打开证书详情</li>
-<li>点击<code>安装证书</code>打开<code>证书导入向导</code></li>
-<li>存储位置选择<code>本地计算机</code>然后下一步</li>
-<li>选择<code>将所有的证书都放入下列存储</code></li>
-<li>点击浏览，选择<code>受信任的根证据颁发机构</code></li>
-<li>导入完成</li>
-</ol>
-
-
-<h3>第七步：完成IIS证书申请</h3>
-
-<p>现在可以将第五步生成的<code>iis.cer</code>导入到IIS中了：</p>
-
-<ol>
-<li>点击第四步<code>创建证书申请</code>下方的<code>完成证书申请</code></li>
-<li>选择证书文件：<code>C:\OpenSSL\bin\KashuoCA\iis.cer</code></li>
-<li>输入一个好记名称，如<code>www.kashuo.com</code></li>
-<li>证书存储默认<code>个人</code></li>
-<li>点击确定完成证书导入</li>
-</ol>
-
-
-<p>这个时候在服务器证书列表里就可以看到这个证书了。</p>
-
-<h3>第八步：打开网站的SSL设置</h3>
-
-<p>安装好IIS证书以后就可以打开网站的SSL设置了：</p>
-
-<ol>
-<li>在IIS左侧<code>连接</code>中选择<code>网站</code></li>
-<li>在右侧<code>操作</code>中点击<code>绑定</code></li>
-<li>在打开的<code>网站绑定</code>中添加一条记录：
-
-<ul>
-<li><code>类型</code>选择<code>https</code></li>
-<li><code>主机名</code>填写绑定的域名，如<code>www.kashuo.com</code></li>
-<li><code>证书</code>就选择我们刚刚添加的证书</li>
-<li>确定完成</li>
-</ul>
-</li>
-<li>然后在中间<code>主页</code>里的<code>IIS</code>中选择<code>SSL设置</code>，这里根据自己的需求进行设置
-
-<ul>
-<li><code>要求SSL</code>：勾选以后只能通过https访问，否则http和https都可以访问</li>
-<li><code>客户证书</code>：
-
-<ul>
-<li>忽略：不论客户端有没有证书都不检验</li>
-<li>接受：如果客户端没有证书就不检验，否则弹出提示框让用户选择证书并检验证书合法性</li>
-<li>必需：客户端必需提供合法证书才能进行访问</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>设置完成以后点击右边<code>应用</code>就可以了</li>
-</ol>
-
-
-<p>对于<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">单向认证SSL</a>连接，在<code>客户证书</code>里选择<code>忽略</code>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
-
-<p>如果对于安全性要求很高的网站，需要使用<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">双向认证SSL</a>连接，在<code>客户证书</code>里就要选择<code>必需</code>，即服务端和客户端互相验证对方证书的合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
-
-<h3>第九步：生成客户端证书申请文件</h3>
-
-<p>命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>openssl req -newkey rsa:1024 -keyout client.key -out client.csr</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参数：</p>
-
-<pre><code>req # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
--newkey rsa:1024 # 同时生成1024位RSA算法的私钥
--keyout # 证书私钥
--out # 证书申请文件
-</code></pre>
-
-<p>细心的你可能发现这个命令和第三步建立CA的命令差不多，区别是少了<code>-x509</code>参数和输出的是证书申请文件。
-运行命令以后输入两次客户端私钥密码，然后就是客户端的一些基本信息。最后的<code>A challenge password</code>和<code>An optional company name</code>不是必填的，我就直接回车跳过了。</p>
-
-<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl req -newkey rsa:1024 -keyout client.key -out client.csr
-Loading 'screen' into random state - done
-Generating a 1024 bit RSA private key
-........++++++
-...++++++
-writing new private key to 'client.key'
-Enter PEM pass phrase:
-Verifying - Enter PEM pass phrase:
------
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [CN]:
-State or Province Name (full name) [Jiangxi]:
-Locality Name (eg, city) [Nanchang]:
-Organization Name (eg, company) [Kashuo]:
-Organizational Unit Name (eg, section) []:KashuoApp
-Common Name (e.g. server FQDN or YOUR name) []:Client
-Email Address []:client@kashuo.com
-
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-A challenge password []:
-An optional company name []:
-</code></pre>
-
-<h3>第十步：签发客户端证书</h3>
-
-<p>命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>openssl ca -in client.csr -cert ca.cer -keyfile ca.key -out client.cer</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参数：</p>
-
-<pre><code>ca # 主要用来签发证书申请
--in # 证书申请文件
--cert # CA证书
--keyfile # CA私钥
--out # 签发的证书
-</code></pre>
-
-<p>签发客户端证书和签发服务器证书的命令是一样的。运行命令以后同样需要输入CA的私钥密码</p>
-
-<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in client.csr -cert ca.cer -keyfile ca.key -out client.cer
-Using configuration from C:\OpenSSL\bin\openssl.cfg
-Loading 'screen' into random state - done
-Enter pass phrase for ca.key:
-Check that the request matches the signature
-Signature ok
-Certificate Details:
-        Serial Number: 2 (0x2)
-        Validity
-            Not Before: Jun 20 14:03:18 2013 GMT
-            Not After : Jun 13 14:03:18 2043 GMT
-        Subject:
-            countryName               = CN
-            stateOrProvinceName       = Jiangxi
-            localityName              = Nanchang
-            organizationName          = Kashuo
-            organizationalUnitName    = KashuoApp
-            commonName                = Client
-            emailAddress              = client@kashuo.com
-        X509v3 extensions:
-            X509v3 Basic Constraints:
-                CA:FALSE
-            Netscape Comment:
-                OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
-                44:C7:B1:DA:5E:36:34:8C:6F:37:17:82:BB:F2:CD:AC:69:1A:3F:41
-            X509v3 Authority Key Identifier:
-                keyid:FE:79:C3:FF:9E:4F:AA:AA:8F:BD:03:19:1A:02:CD:60:27:FB:98:67
-
-Certificate is to be certified until Jun 13 14:03:18 2043 GMT (10950 days)
-Sign the certificate? [y/n]:y
-
-1 out of 1 certificate requests certified, commit? [y/n]y
-Write out database with 1 new entries
-Data Base Updated
-</code></pre>
-
-<p>client.cer就是客户端证书了</p>
-
-<h3>第十一步：将客户端证书转换为PKCS#12格式</h3>
-
-<p>命令：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>openssl pkcs12 -export -clcerts -in client.cer -inkey client.key -out client.p12</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参数：</p>
-
-<pre><code>pkcs12 # 生成或解析PKCS#12证书
--export # 生成证书
--clcerts # 输出客户端证书
--in # 原证书
--inkey # 私钥
--out # 转换后证书
-</code></pre>
-
-<p>先输入客户端证书私钥密码，然后输入两次p12文件的导出密码</p>
-
-<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl pkcs12 -export -clcerts -in client.cer -inkey client.key -out client.p12
-Loading 'screen' into random state - done
-Enter pass phrase for client.key:
-Enter Export Password:
-Verifying - Enter Export Password:
-</code></pre>
-
-<p>client.p12包含客户端证书和私钥，支持浏览器直接导入，最后一步就是导入p12证书了。</p>
-
-<h3>第十二步：导入客户端证书</h3>
-
-<p>在客户端电脑导入客户端证书之前需要先导入CA根证书，将第三步生成的CA根证书文件拷贝到客户端电脑里，按照第六步的流程导入CA根证书。</p>
-
-<p>接着安装客户端证书，这个就比较简单了：</p>
-
-<ol>
-<li>双击client.p12打开证书详情</li>
-<li>存储位置默认<code>当前用户</code></li>
-<li>输入p12文件的导出密码</li>
-<li>根据个人需要勾选是否可导出密钥</li>
-<li><code>自动选择证书存储</code>就可以</li>
-<li>大功告成！</li>
-</ol>
-
-
-<p>当导入客户端完成以后，客户端与服务端的双向认证SSL就搞定了！</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -652,18 +218,12 @@ Verifying - Enter Export Password:
 我的系统是10.8.3，不知道这个是我的个例还是普遍的bug。
 最后总算找到了解决办法，如果你也正好碰到这个问题，不妨试试下面的步骤：</p>
 
-<ol>
-<li>关闭OmniFocus</li>
-<li>打开<code>系统偏好设置</code>，进入<code>键盘</code>设置，选择<code>键盘快捷键</code></li>
-<li>在左边栏中选择<code>服务</code></li>
-<li>向下滚动到<code>文本</code>，里面有一个<code>OmniFocus：发送到收件箱</code></li>
-<li>选中它，然后点击右边的<code>添加快捷键</code>分配你喜欢的快捷方式就可以了。我设置的是<code>Shift-Command-X</code></li>
-</ol>
-
-
-<p><img src="/images/quick-clippings-shortcut.jpg" alt="截图" /></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -734,66 +294,12 @@ Verifying - Enter Export Password:
 
 <p>上面的代码自定义了返回按钮的样式。</p>
 
-<p>如果我们想把返回按钮里面的文字改成<code>返回</code>，简单的办法就是：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">UIBarButtonItem</span> <span class="o">*</span><span class="n">backButton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIBarButtonItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">backButton</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">@&quot;返回&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">navigationItem</span><span class="p">.</span><span class="n">backBarButtonItem</span> <span class="o">=</span> <span class="n">backButton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里我们假设打开了ARC，所以不需要<code>[backButton release]</code>。</p>
-
-<p>上面的办法只是一次性定义返回按钮的文字，如果需要把所有返回按钮的文字都改成<code>返回</code>，那就需要用到<code>Category</code>：</p>
-
-<figure class='code'><figcaption><span>UINavigationItem+MyBackButton.h</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">UINavigationItem</span> <span class="nl">(MyBackButton)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>UINavigationItem+MyBackButton.m</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;UINavigationItem+MyBackButton.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">UINavigationItem</span> <span class="nl">(MyBackButton)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIBarButtonItem</span> <span class="o">*</span><span class="p">)</span><span class="nf">backBarButtonItem</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="n">UIBarButtonItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;返回&quot;</span> <span class="nl">style:</span><span class="n">UIBarButtonItemStylePlain</span> <span class="nl">target:</span><span class="nb">nil</span> <span class="nl">action:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>把上面两个文件拖到项目里面就可以了。是不是很简单！</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -839,54 +345,12 @@ Verifying - Enter Export Password:
 
 <p>Launch Service隶属于Application Service Framework（包含一堆的应用程序接口，开发者可以通过这些接口，调用系统服务），用于使一个运行中的程序，能够打开另一个程序，文档，URL的接口。它可以打开另一个程序；在另一个程序中打开文档或URL；找到对于一个文档或URL最适用的程序；为一个应用程序注册它可以关联的文档类型和URL；获得一个文件，URL等正确的显示方式，比如如何显示此类文件的图标以及信息等；维护和更新最近试用过的最近试用程序和文档的列表。</p>
 
-<p>从原理上看，Launch Service维护着一个文件到应用程序之间的多对多对应关系，这个关系是存在一个数据库中。这个数据库被称作Launch Service Database。对于Mac OS X下的每一个文件都有描述信息（包括我们从GetInfo中看到的一些）。Launch Service感兴趣的，就是这个文件的文件类型码，创建者签名，文件扩展名，显示名称（用在Finder或Dock中显示），文件通用类型描述（比如，是应用程序，还是文件夹，或是替身，或是文件或视频）。除了这些，还有一些额外的（Meta Data用于快速描述文件信息）标志位。比如，是否是可执行程序，是否是容器（文件夹，包，卷，dmg），是否是隐藏文件等等。而应用程序方面，Launch Service会从应用程序的info.plist中获取诸如应用程序名称，图标，应用程序可打开的文件或URL类型，运行环境，是否有UI，对应权限等信息。Launch Service就会根据这些信息，建立数据库，这就是右键点击文件时，看到的可打开此文件的应用程序列表。当然，如果一个文件根本没有任何匹配，右键菜单为空。Launch Service会跳出窗口，让用户自行选择应用程序。用户选择后，Launch Service就会将这个对应关系保存在数据库中。</p>
-
-<p>Launch Service对于一个文件关联多种应用程序的时候，也是有优先级排序规则的，从右键菜单就可以看出，Launch Service会有一个默认选择的应用程序。它的排序规则是：</p>
-
-<ol>
-<li>用户手动指定的应用程序拥有最高优先级。</li>
-<li>如果没有指定，那么Launch Service会查看此文件扩展名，然后找到数据库中所有跟此扩展名相关的应用程序。</li>
-<li>如果没有扩展名，或者第二步中找到多于一个的应用程序，LS会查找该文件是否含有文件类型码，再按照此类型码在数据库中查找所有相关应用程序。</li>
-<li>如果通过2，3步还是找到了多于一个的应用程序，那么，首先查找哪些应用程序注册的创建者签名和文件的创建者签名匹配，然后再查找哪些应用程序是否是Mac OS X本地应用程序（Native Program，指的是不用Classic模拟环境，X11模拟环境，Java，Python等等），再查找应用程序是否是存在于系统启动卷上，再查找哪些应用程序在本地卷上，如果到这里还是剩下多于一个的应用程序，就只能比版本号了。如果还是比不出来，那么LS就会随便排序了。</li>
-</ol>
-
-
-<h4>常见问题</h4>
-
-<p>通常，我们在Mac下会遇到<strong>重复菜单项</strong>的问题，或者某些已经卸载的程序的<strong>菜单项遗留</strong>。从原因上来看，有三种可能：</p>
-
-<ol>
-<li>除了LS感兴趣的项目外，还有好多其他的项目也要被存储在数据库中。每当LS要注册一个新应用程序时，它会先看这个应用程序中有没有一个<code>inUpdate</code>的描述，如果此描述值为1（就是Yes），那么LS会查找数据库进行匹配。匹配到后会用这个新应用程序的信息来更新这个旧的信息。如果<code>inUpdate</code>为0，那么LS会直接注册这个应用程序并关联文件。这可能是潜在的重复项出现原因。</li>
-<li>有些装在VM或者PD的应用程序，在VM或PD卸载后也会残留到LS数据库中。</li>
-<li>应用程序描述的一些更新变化，使得LS认为这是一个全新的应用程序而直接注册。</li>
-</ol>
-
-
-<p>以上三个方面都有可能造成重复菜单项的出现，而且很难完全避免。</p>
-
-<h4>解决办法</h4>
-
-<p>如果需要清理菜单重复项和无效的关联，可以在终端运行下面命令，在本地、系统和用户空间上，重建LS数据库：</p>
-
-<pre><code>/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
-</code></pre>
-
-<p>lsregister命令参数如下：</p>
-
-<pre><code>-kill：重置全局LS数据库(最先执行)
--lint：打印详细应用程序文件关联注册中的错误信息
--convert：将老数据库中的信息注册到新的LS数据库
--load：加载LS插件
--lazy n：指定一个注册等待时间
--r：递归的查找文件夹内容以做关联之用（不包括pkg类型文件和隐藏文件夹下的内容）
--R：递归的查找文件夹内容以做关联之用（包括pkg类型文件和隐藏文件夹下的内容）
--f：强制更新所有对应注册信息
--v：输出lsregister运行详细信息
--dump：在注册完成后显示数据库内容
--h：显示此帮助
-</code></pre>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/11/28/about-mac-os-x-secondary-click/">Read on &rarr;</a>
+    </footer>
   
 
 

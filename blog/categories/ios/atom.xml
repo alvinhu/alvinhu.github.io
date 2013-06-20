@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-21T00:04:19+08:00</updated>
+  <updated>2013-06-21T05:07:36+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -40,6 +40,9 @@ return YES;
 ```</p>
 
 <p>上面的代码自定义了返回按钮的样式。</p>
+
+<!-- more -->
+
 
 <p>如果我们想把返回按钮里面的文字改成<code>返回</code>，简单的办法就是：</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/ssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-21T00:04:19+08:00</updated>
+  <updated>2013-06-21T05:07:36+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -19,6 +19,9 @@
     <updated>2013-06-20T12:28:00+08:00</updated>
     <id>http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication</id>
     <content type="html"><![CDATA[<p>为了便于更好的认识和理解SSL协议，这里着重介绍SSL协议的握手流程。SSL协议既用到了公钥加密技术又用到了对称加密技术，对称加密技术虽然比公钥加密技术的速度快，可是公钥加密技术提供了更好的身份认证技术。SSL的握手流程非常有效的让客户端和服务器之间完成相互之间的身份认证。</p>
+
+<!-- more -->
+
 
 <h3>SSL握手流程</h3>
 
@@ -57,6 +60,9 @@
 <p>由于网上千篇一律的只是教大家怎么怎么操作，并没有告诉大家为什么这么操作。而作为一个喜欢打破砂锅问到底的强迫症患者，自己又花了一些时间研究了各个步骤及参数的原理，在这里把这些小小的理解及经验记录下来，即给有同样需求的同行们做个参考，也给未来的自己留作备份。</p>
 
 <p>欢迎转载，转载请保留原文地址。</p>
+
+<!-- more -->
+
 
 <h2>申明</h2>
 

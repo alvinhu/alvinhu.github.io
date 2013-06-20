@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OmniFocus | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/omnifocus/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-21T00:04:19+08:00</updated>
+  <updated>2013-06-21T05:07:36+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -22,6 +22,9 @@
 软件安装完了以后进行一些基本设置的时候发现一个小问题：在<code>剪辑预置</code>中的<code>剪辑快捷键（Quick Clippings Shortcut）</code>不论如何设置都无法正常使用。
 我的系统是10.8.3，不知道这个是我的个例还是普遍的bug。
 最后总算找到了解决办法，如果你也正好碰到这个问题，不妨试试下面的步骤：</p>
+
+<!-- more -->
+
 
 <ol>
 <li>关闭OmniFocus</li>
