@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/ssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T23:57:13+08:00</updated>
+  <updated>2013-06-21T00:00:03+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -280,7 +280,7 @@ Data Base Updated
 <li>点击第四步<code>创建证书申请</code>下方的<code>完成证书申请</code></li>
 <li>选择证书文件：<code>C:\OpenSSL\bin\KashuoCA\iis.cer</code></li>
 <li>输入一个好记名称，如<code>www.kashuo.com</code></li>
-<li>证书存储默认为<code>个人</code>不变</li>
+<li>证书存储默认<code>个人</code></li>
 <li>点击确定完成证书导入</li>
 </ol>
 
@@ -469,10 +469,10 @@ Verifying - Enter Export Password:
 
 <ol>
 <li>双击client.p12打开证书详情</li>
-<li>存储位置默认当前用户</li>
+<li>存储位置默认<code>当前用户</code></li>
 <li>输入p12文件的导出密码</li>
 <li>根据个人需要勾选是否可导出密钥</li>
-<li>自动选择证书存储就可以了</li>
+<li><code>自动选择证书存储</code>就可以</li>
 <li>大功告成！</li>
 </ol>
 
