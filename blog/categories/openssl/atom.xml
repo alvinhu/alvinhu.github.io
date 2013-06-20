@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenSSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/openssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-20T21:29:53+08:00</updated>
+  <updated>2013-06-20T23:53:04+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -24,16 +24,18 @@
 
 <p>由于网上千篇一律的只是教大家怎么怎么操作，并没有告诉大家为什么这么操作。而作为一个喜欢打破砂锅问到底的强迫症患者，自己又花了一些时间研究了各个步骤及参数的原理，在这里把这些小小的理解及经验记录下来，即给有同样需求的同行们做个参考，也给未来的自己留作备份。</p>
 
+<p>欢迎转载，转载请保留原文地址。</p>
+
 <h2>申明</h2>
 
-<p>本人并非互联网安全专家，也不是OpenSSL老手。如果这篇文章对你有用，本人非常高兴。如果无法解决问题，你可以google其他更加专业的文章，我相信只要花点时间肯定能够找到答案。本文中所有步骤都经过本人多次测试，但不能保证一定正确，在此仅供参考。如有不对之处，欢迎留言探讨及指正。</p>
+<p>本人并非互联网安全专家，也不是OpenSSL老手。如果这篇文章对你有用，本人非常高兴。如果无法解决问题，你可以google其他更专业的文章，我相信只要花点时间肯定能够找到答案。本文中所有步骤都经过本人多次测试，但不能保证一定正确，在此仅供参考。如有不对之处，欢迎留言探讨及指正。</p>
 
 <h2>准备</h2>
 
 <ul>
 <li>Windows 8 + IIS 8</li>
-<li>直接下载编译好的<a href="http://slproweb.com/products/Win32OpenSSL.html">OpenSSL</a>，由于我的系统是64位的，所以我下的是最新版的<strong>Win64 OpenSSL v1.0.1e Light</strong></li>
-<li>安装OpenSSL之前要先装<strong>Visual C++ 2008 SP1 Redistributables</strong>，根据系统选择<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=5582">32位</a>的和<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=2092">64位</a>下载并安装</li>
+<li>直接下载编译好的<a href="http://slproweb.com/products/Win32OpenSSL.html">OpenSSL</a>，由于我的系统是64位的，所以我下的是最新版的<code>Win64 OpenSSL v1.0.1e Light</code></li>
+<li>安装OpenSSL之前要先装<code>Visual C++ 2008 SP1 Redistributables</code>，根据系统选择<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=5582">32位</a>的和<a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=2092">64位</a>下载并安装</li>
 </ul>
 
 
@@ -42,16 +44,16 @@
 <h3>第一步：安装OpenSSL</h3>
 
 <ol>
-<li>尽管我们已经安装了<strong>Visual C++ 2008 SP1 Redistributables</strong>，安装刚开始还是会提示未安装<strong>Visual C++ 2008 Redistributables</strong>，不管它直接点击确定</li>
-<li>一路下一步就可以了，安装文件夹我选择<strong>C:\OpenSSL</strong></li>
-<li>在<strong>Copy OpenSSL DLLs to:</strong>的地方我选择<strong>The OpenSSL binaries (/bin) directory</strong>，我不喜欢把什么DLL都往Windows目录丢，这样放在应用程序目录下比较干净</li>
+<li>尽管我们已经安装了<code>Visual C++ 2008 SP1 Redistributables</code>，安装刚开始还是会提示未安装<code>Visual C++ 2008 Redistributables</code>，不管它直接点击确定</li>
+<li>一路下一步就可以了，安装文件夹我选择<code>C:\OpenSSL</code></li>
+<li>在<code>Copy OpenSSL DLLs to:</code>的地方我选择<code>The OpenSSL binaries (/bin) directory</code>，我不喜欢把什么DLL都往Windows目录丢，这样放在应用程序目录下比较干净</li>
 <li>完成安装</li>
 </ol>
 
 
 <h3>第二步：配置OpenSSL</h3>
 
-<p>1、将路径<strong>C:\OpenSSL\bin\</strong>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</p>
+<p>1、将路径<code>C:\OpenSSL\bin\</code>添加到系统路径中（控制面板 > 系统与安全 > 系统 > 高级系统设置 > 环境变量 > 系统变量 > Path），这样在任何路径中都能运行OpenSSL命令</p>
 
 <p>2、打开openssl.cfg，修改一下配置：</p>
 
@@ -67,10 +69,10 @@ localityName_default = Nanchang # 默认城市，在localityName = Locality Name
 <p>3、接着准备文件夹及文件：</p>
 
 <ul>
-<li>新建文件夹<strong>C:\OpenSSL\bin\KashuoCA</strong></li>
-<li>新建文件夹<strong>C:\OpenSSL\bin\KashuoCA\newcerts</strong></li>
-<li>新建文件<strong>C:\OpenSSL\bin\KashuoCA\serial</strong>（无后缀名），里面写入<code>01</code>，用来存放签发证书流水号</li>
-<li>新建空文件<strong>C:\OpenSSL\bin\KashuoCA\index.txt</strong>，用来存放签发证书记录</li>
+<li>新建文件夹<code>C:\OpenSSL\bin\KashuoCA</code></li>
+<li>新建文件夹<code>C:\OpenSSL\bin\KashuoCA\newcerts</code></li>
+<li>新建文件<code>C:\OpenSSL\bin\KashuoCA\serial</code>（无后缀名），里面写入<code>01</code>，用来存放签发证书流水号</li>
+<li>新建空文件<code>C:\OpenSSL\bin\KashuoCA\index.txt</code>，用来存放签发证书记录</li>
 </ul>
 
 
@@ -107,7 +109,7 @@ openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer
 
 <p>由于我们之前已经设置了证书有效期和cfg文件的地址，所以在命令里就不需要重复设置了</p>
 
-<p>运行命令以后会要求输入私钥密码，并且再输入一次确认密码。在输入国家省份等资料的时候直接回车使用之前我们设置的默认值就可以了，但是在<strong>Organizational Unit Name</strong>、<strong>Common Name</strong>和<strong>Email Address</strong>三个地方没有设置默认值，因为这三个资料在CA证书和服务器证书里是不一样的。</p>
+<p>运行命令以后会要求输入私钥密码，并且再输入一次确认密码。在输入国家省份等资料的时候直接回车使用之前我们设置的默认值就可以了，但是在<code>Organizational Unit Name</code>、<code>Common Name</code>和<code>Email Address</code>三个地方没有设置默认值，因为这三个资料在CA证书和服务器证书里是不一样的。</p>
 
 <pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl req -x509 -newkey rsa:1024 -keyout ca.key -out ca.cer
 Loading 'screen' into random state - done
@@ -140,13 +142,13 @@ Email Address []:ca@kashuo.com
 
 <p>由于本例中证书文件是部署在IIS中，所以通过IIS直接生成证书文件会比较方便。当然第二步中提到了通过OpenSSL的req方法也可以生成证书申请文件。</p>
 
-<p>1、打开<strong>IIS</strong></p>
+<p>1、打开<code>IIS</code></p>
 
-<p>2、在左侧<strong>连接</strong>中选择服务器</p>
+<p>2、在左侧<code>连接</code>中选择服务器</p>
 
-<p>3、在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>服务器证书</strong></p>
+<p>3、在中间<code>主页</code>里的<code>IIS</code>中选择<code>服务器证书</code></p>
 
-<p>4、在右侧<strong>操作</strong>中选择<strong>创建证书申请</strong></p>
+<p>4、在右侧<code>操作</code>中选择<code>创建证书申请</code></p>
 
 <p>5、在打开的窗口中填入以下信息：</p>
 
@@ -162,7 +164,7 @@ Email Address []:ca@kashuo.com
 
 <p>6、加密服务选择RSA和1024位</p>
 
-<p>7、最后保存证书申请的文件为<strong>C:\OpenSSL\bin\KashuoCA\certreq.txt</strong></p>
+<p>7、最后保存证书申请的文件为<code>C:\OpenSSL\bin\KashuoCA\certreq.txt</code></p>
 
 <h3>第五步：签发服务器证书</h3>
 
@@ -222,31 +224,31 @@ Write out database with 1 new entries
 Data Base Updated
 </code></pre>
 
-<p>最后我们得到了服务器证书<strong>iis.cer</strong></p>
+<p>最后我们得到了服务器证书<code>iis.cer</code></p>
 
 <h3>第六步：在服务器上导入CA根证书</h3>
 
 <p>由于第三步生成的CA根证书是自签名的，并非由系统可以识别的第三方信任机构签发，所以需要将CA根证书导入到服务器中。</p>
 
 <ol>
-<li>双击<strong>ca.cer</strong>打开证书详情</li>
-<li>点击<strong>安装证书</strong>打开<strong>证书导入向导</strong></li>
-<li>存储位置选择<strong>本地计算机</strong>然后下一步</li>
-<li>选择<strong>将所有的证书都放入下列存储</strong></li>
-<li>点击浏览，选择<strong>受信任的根证据颁发机构</strong></li>
+<li>双击<code>ca.cer</code>打开证书详情</li>
+<li>点击<code>安装证书</code>打开<code>证书导入向导</code></li>
+<li>存储位置选择<code>本地计算机</code>然后下一步</li>
+<li>选择<code>将所有的证书都放入下列存储</code></li>
+<li>点击浏览，选择<code>受信任的根证据颁发机构</code></li>
 <li>导入完成</li>
 </ol>
 
 
 <h3>第七步：完成IIS证书申请</h3>
 
-<p>现在可以将第五步生成的<strong>iis.cer</strong>导入到IIS中了：</p>
+<p>现在可以将第五步生成的<code>iis.cer</code>导入到IIS中了：</p>
 
 <ol>
-<li>点击第四步<strong>创建证书申请</strong>下方的<strong>完成证书申请</strong></li>
-<li>选择证书文件：<strong>C:\OpenSSL\bin\KashuoCA\iis.cer</strong></li>
-<li>输入一个好记名称，如<strong>www.kashuo.com</strong></li>
-<li>证书存储默认为<strong>个人</strong>不变</li>
+<li>点击第四步<code>创建证书申请</code>下方的<code>完成证书申请</code></li>
+<li>选择证书文件：<code>C:\OpenSSL\bin\KashuoCA\iis.cer</code></li>
+<li>输入一个好记名称，如<code>www.kashuo.com</code></li>
+<li>证书存储默认为<code>个人</code>不变</li>
 <li>点击确定完成证书导入</li>
 </ol>
 
@@ -258,22 +260,22 @@ Data Base Updated
 <p>安装好IIS证书以后就可以打开网站的SSL设置了：</p>
 
 <ol>
-<li>在IIS左侧<strong>连接</strong>中选择<strong>网站</strong></li>
-<li>在右侧<strong>操作</strong>中点击<strong>绑定</strong></li>
-<li>在打开的<strong>网站绑定</strong>中添加一条记录：
+<li>在IIS左侧<code>连接</code>中选择<code>网站</code></li>
+<li>在右侧<code>操作</code>中点击<code>绑定</code></li>
+<li>在打开的<code>网站绑定</code>中添加一条记录：
 
 <ul>
-<li><strong>类型</strong>选择<strong>https</strong></li>
-<li><strong>主机名</strong>填写绑定的域名，如<strong>www.kashuo.com</strong></li>
-<li><strong>证书</strong>就选择我们刚刚添加的证书</li>
+<li><code>类型</code>选择<code>https</code></li>
+<li><code>主机名</code>填写绑定的域名，如<code>www.kashuo.com</code></li>
+<li><code>证书</code>就选择我们刚刚添加的证书</li>
 <li>确定完成</li>
 </ul>
 </li>
-<li>然后在中间<strong>主页</strong>里的<strong>IIS</strong>中选择<strong>SSL设置</strong>，这里根据自己的需求进行设置
+<li>然后在中间<code>主页</code>里的<code>IIS</code>中选择<code>SSL设置</code>，这里根据自己的需求进行设置
 
 <ul>
-<li><strong>要求SSL</strong>：勾选以后只能通过https访问，否则http和https都可以访问</li>
-<li><strong>客户证书</strong>：
+<li><code>要求SSL</code>：勾选以后只能通过https访问，否则http和https都可以访问</li>
+<li><code>客户证书</code>：
 
 <ul>
 <li>忽略：不论客户端有没有证书都不检验</li>
@@ -283,13 +285,163 @@ Data Base Updated
 </li>
 </ul>
 </li>
-<li>设置完成以后点击右边<strong>应用</strong>就可以了</li>
+<li>设置完成以后点击右边<code>应用</code>就可以了</li>
 </ol>
 
 
-<p>对于<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">单向认证SSL</a>连接，在<strong>客户证书</strong>里选择<strong>忽略</strong>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
+<p>对于<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">单向认证SSL</a>连接，在<code>客户证书</code>里选择<code>忽略</code>就可以，教程到这里也就结束了。客户端在访问https地址的时候会收到一个提示，即服务器证书并非由信任的第三方证书颁发机构颁发，客户端选择继续或者保存为信任的证书就可以继续访问了。</p>
 
-<p>如果对于安全性要求很高的网站，需要使用<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">双向认证SSL</a>连接，在<strong>客户证书</strong>里就要选择<strong>必需</strong>，即服务端和客户端互相验证对方证书的合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
+<p>如果对于安全性要求很高的网站，需要使用<a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">双向认证SSL</a>连接，在<code>客户证书</code>里就要选择<code>必需</code>，即服务端和客户端互相验证对方证书的合法性。那就还需要为客户端生成一个服务端认可的证书。</p>
+
+<h3>第九步：生成客户端证书申请文件</h3>
+
+<p>命令：</p>
+
+<p><code>
+openssl req -newkey rsa:1024 -keyout client.key -out client.csr
+</code></p>
+
+<p>参数：</p>
+
+<pre><code>req # 用来生成PKCS#10格式的证书申请文件，也可以生成自签名的CA根证书
+-newkey rsa:1024 # 同时生成1024位RSA算法的私钥
+-keyout # 证书私钥
+-out # 证书申请文件
+</code></pre>
+
+<p>细心的你可能发现这个命令和第三步建立CA的命令差不多，区别是少了<code>-x509</code>参数和输出的是证书申请文件。
+运行命令以后输入两次客户端私钥密码，然后就是客户端的一些基本信息。最后的<code>A challenge password</code>和<code>An optional company name</code>不是必填的，我就直接回车跳过了。</p>
+
+<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl req -newkey rsa:1024 -keyout client.key -out client.csr
+Loading 'screen' into random state - done
+Generating a 1024 bit RSA private key
+........++++++
+...++++++
+writing new private key to 'client.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [CN]:
+State or Province Name (full name) [Jiangxi]:
+Locality Name (eg, city) [Nanchang]:
+Organization Name (eg, company) [Kashuo]:
+Organizational Unit Name (eg, section) []:KashuoApp
+Common Name (e.g. server FQDN or YOUR name) []:Client
+Email Address []:client@kashuo.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+</code></pre>
+
+<h3>第十步：签发客户端证书</h3>
+
+<p>命令：</p>
+
+<p><code>
+openssl ca -in client.csr -cert ca.cer -keyfile ca.key -out client.cer
+</code></p>
+
+<p>参数：</p>
+
+<pre><code>ca # 主要用来签发证书申请
+-in # 证书申请文件
+-cert # CA证书
+-keyfile # CA私钥
+-out # 签发的证书
+</code></pre>
+
+<p>签发客户端证书和签发服务器证书的命令是一样的。运行命令以后同样需要输入CA的私钥密码</p>
+
+<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl ca -in client.csr -cert ca.cer -keyfile ca.key -out client.cer
+Using configuration from C:\OpenSSL\bin\openssl.cfg
+Loading 'screen' into random state - done
+Enter pass phrase for ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 2 (0x2)
+        Validity
+            Not Before: Jun 20 14:03:18 2013 GMT
+            Not After : Jun 13 14:03:18 2043 GMT
+        Subject:
+            countryName               = CN
+            stateOrProvinceName       = Jiangxi
+            localityName              = Nanchang
+            organizationName          = Kashuo
+            organizationalUnitName    = KashuoApp
+            commonName                = Client
+            emailAddress              = client@kashuo.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier:
+                44:C7:B1:DA:5E:36:34:8C:6F:37:17:82:BB:F2:CD:AC:69:1A:3F:41
+            X509v3 Authority Key Identifier:
+                keyid:FE:79:C3:FF:9E:4F:AA:AA:8F:BD:03:19:1A:02:CD:60:27:FB:98:67
+
+Certificate is to be certified until Jun 13 14:03:18 2043 GMT (10950 days)
+Sign the certificate? [y/n]:y
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+</code></pre>
+
+<p>client.cer就是客户端证书了</p>
+
+<h3>第十一步：将客户端证书转换为PKCS#12格式</h3>
+
+<p>命令：</p>
+
+<p><code>
+openssl pkcs12 -export -clcerts -in client.cer -inkey client.key -out client.p12
+</code></p>
+
+<p>参数：</p>
+
+<pre><code>pkcs12 # 生成或解析PKCS#12证书
+-export # 生成证书
+-clcerts # 输出客户端证书
+-in # 原证书
+-inkey # 私钥
+-out # 转换后证书
+</code></pre>
+
+<p>先输入客户端证书私钥密码，然后输入两次p12文件的导出密码</p>
+
+<pre><code>C:\OpenSSL\bin\KashuoCA&gt;openssl pkcs12 -export -clcerts -in client.cer -inkey client.key -out client.p12
+Loading 'screen' into random state - done
+Enter pass phrase for client.key:
+Enter Export Password:
+Verifying - Enter Export Password:
+</code></pre>
+
+<p>client.p12包含客户端证书和私钥，支持浏览器直接导入，最后一步就是导入p12证书了。</p>
+
+<h3>第十二步：导入客户端证书</h3>
+
+<p>在客户端电脑导入客户端证书之前需要先导入CA根证书，将第三步生成的CA根证书文件拷贝到客户端电脑里，按照第六步的流程导入CA根证书。</p>
+
+<p>接着安装客户端证书，这个就比较简单了：
+1. 双击client.p12打开证书详情
+2. 存储位置默认当前用户
+3. 输入p12文件的导出密码
+4. 根据个人需要勾选是否可导出密钥
+5. 自动选择证书存储就可以了
+6. 大功告成！</p>
+
+<p>当导入客户端完成以后，客户端与服务端的双向认证SSL就搞定了！</p>
 ]]></content>
   </entry>
   
