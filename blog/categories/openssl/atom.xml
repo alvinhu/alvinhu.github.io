@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenSSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/openssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-21T06:31:17+08:00</updated>
+  <updated>2013-06-22T14:55:46+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -448,7 +448,27 @@ Verifying - Enter Export Password:
 </ol>
 
 
-<p>当导入客户端完成以后，客户端与服务端的双向认证SSL就搞定了！</p>
+<p>当导入客户端完成以后，客户端与服务器的双向认证SSL就搞定了！</p>
+
+<h3>补充：</h3>
+
+<p>PEM编码证书转换为DER编码证书</p>
+
+<p>命令：</p>
+
+<p><code>
+openssl x509 -outform der -in iis.cer -out iisder.cer
+</code></p>
+
+<p>参数：</p>
+
+<pre><code>x509 # x509证书管理
+-outform der # 转换为DER编码
+-in # 原证书
+-out # 转换后证书
+</code></pre>
+
+<p>目前我在iOS开发中使用了AFNetworking，在做<code>SSL Pinning</code>的时候读取服务器证书要求证书编码为DER，而第五步生成的证书编码为PEM，所以需要用这个命令转换一下。</p>
 ]]></content>
   </entry>
   
