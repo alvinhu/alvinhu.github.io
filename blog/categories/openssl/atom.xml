@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenSSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/openssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-22T14:57:21+08:00</updated>
+  <updated>2013-06-22T15:14:56+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -469,6 +469,19 @@ openssl x509 -outform der -in iis.cer -out iisder.cer
 </code></pre>
 
 <p>目前我在iOS开发中使用了AFNetworking，在做<code>SSL Pinning</code>的时候读取服务器证书要求证书编码为DER，而第五步生成的证书编码为PEM，所以需要用这个命令转换一下。</p>
+
+<h2>总结</h2>
+
+<p>通过这次的CA安装和签发证书的学习，弄清了通过SSL提高网络请求安全性的基本原理，也明白了证书到底是个什么东西。其实只要有心，没有什么是深不可测的。</p>
+
+<p>当然自签名CA根证书只是一个临时解决方案，也是学习概念和理论的好途径，如果在大型应用并且不差钱话还是去可信任的CA机构购买证书吧！全文完！</p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="http://www.openssl.org/docs/">OpenSSL Documents</a></li>
+</ul>
+
 ]]></content>
   </entry>
   
