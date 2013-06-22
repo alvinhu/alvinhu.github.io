@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenSSL | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/openssl/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-06-22T14:55:46+08:00</updated>
+  <updated>2013-06-22T14:57:21+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -450,7 +450,7 @@ Verifying - Enter Export Password:
 
 <p>当导入客户端完成以后，客户端与服务器的双向认证SSL就搞定了！</p>
 
-<h3>补充：</h3>
+<h2>补充：</h2>
 
 <p>PEM编码证书转换为DER编码证书</p>
 
