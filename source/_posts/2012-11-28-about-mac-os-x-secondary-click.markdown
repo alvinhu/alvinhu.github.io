@@ -15,6 +15,8 @@ Mac OS X的Launch Service用于关联应用程序和文件并维护最近打开�
 
 Launch Service隶属于Application Service Framework（包含一堆的应用程序接口，开发者可以通过这些接口，调用系统服务），用于使一个运行中的程序，能够打开另一个程序，文档，URL的接口。它可以打开另一个程序；在另一个程序中打开文档或URL；找到对于一个文档或URL最适用的程序；为一个应用程序注册它可以关联的文档类型和URL；获得一个文件，URL等正确的显示方式，比如如何显示此类文件的图标以及信息等；维护和更新最近试用过的最近试用程序和文档的列表。
 
+<!-- more -->
+
 从原理上看，Launch Service维护着一个文件到应用程序之间的多对多对应关系，这个关系是存在一个数据库中。这个数据库被称作Launch Service Database。对于Mac OS X下的每一个文件都有描述信息（包括我们从GetInfo中看到的一些）。Launch Service感兴趣的，就是这个文件的文件类型码，创建者签名，文件扩展名，显示名称（用在Finder或Dock中显示），文件通用类型描述（比如，是应用程序，还是文件夹，或是替身，或是文件或视频）。除了这些，还有一些额外的（Meta Data用于快速描述文件信息）标志位。比如，是否是可执行程序，是否是容器（文件夹，包，卷，dmg），是否是隐藏文件等等。而应用程序方面，Launch Service会从应用程序的info.plist中获取诸如应用程序名称，图标，应用程序可打开的文件或URL类型，运行环境，是否有UI，对应权限等信息。Launch Service就会根据这些信息，建立数据库，这就是右键点击文件时，看到的可打开此文件的应用程序列表。当然，如果一个文件根本没有任何匹配，右键菜单为空。Launch Service会跳出窗口，让用户自行选择应用程序。用户选择后，Launch Service就会将这个对应关系保存在数据库中。
 
 Launch Service对于一个文件关联多种应用程序的时候，也是有优先级排序规则的，从右键菜单就可以看出，Launch Service会有一个默认选择的应用程序。它的排序规则是：
@@ -38,22 +40,18 @@ Launch Service对于一个文件关联多种应用程序的时候，也是有优
 
 如果需要清理菜单重复项和无效的关联，可以在终端运行下面命令，在本地、系统和用户空间上，重建LS数据库：
 
-```
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
-```
+	/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 lsregister命令参数如下：
 
-```
--kill：重置全局LS数据库(最先执行)
--lint：打印详细应用程序文件关联注册中的错误信息
--convert：将老数据库中的信息注册到新的LS数据库
--load：加载LS插件
--lazy n：指定一个注册等待时间
--r：递归的查找文件夹内容以做关联之用（不包括pkg类型文件和隐藏文件夹下的内容）
--R：递归的查找文件夹内容以做关联之用（包括pkg类型文件和隐藏文件夹下的内容）
--f：强制更新所有对应注册信息
--v：输出lsregister运行详细信息
--dump：在注册完成后显示数据库内容
--h：显示此帮助
-```
+	-kill：重置全局LS数据库(最先执行)
+	-lint：打印详细应用程序文件关联注册中的错误信息
+	-convert：将老数据库中的信息注册到新的LS数据库
+	-load：加载LS插件
+	-lazy n：指定一个注册等待时间
+	-r：递归的查找文件夹内容以做关联之用（不包括pkg类型文件和隐藏文件夹下的内容）
+	-R：递归的查找文件夹内容以做关联之用（包括pkg类型文件和隐藏文件夹下的内容）
+	-f：强制更新所有对应注册信息
+	-v：输出lsregister运行详细信息
+	-dump：在注册完成后显示数据库内容
+	-h：显示此帮助
