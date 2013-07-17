@@ -4,7 +4,7 @@
   <title><![CDATA[alvin hu]]></title>
   <link href="http://alvinhu.com/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-07-17T16:16:35+08:00</updated>
+  <updated>2013-07-17T16:19:27+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -29,11 +29,11 @@
 
 <p>本着越挫越勇的精神，今天跟微软干上了！度娘不行咱找谷哥！最后找到用命令行从Win8镜像文件或安装光盘里安装3.5，不过我发现从C盘里也可以直接安装，连镜像文件或安装光盘都省了！</p>
 
-<ul>
+<ol>
 <li>按下<code>Win+X</code></li>
 <li>点击<code>命令提示符(管理员)</code></li>
 <li>运行下面的命令：</li>
-</ul>
+</ol>
 
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
