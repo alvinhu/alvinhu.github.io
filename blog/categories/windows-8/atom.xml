@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Windows 8 | alvin hu]]></title>
+  <link href="http://alvinhu.com/blog/categories/windows-8/atom.xml" rel="self"/>
+  <link href="http://alvinhu.com/"/>
+  <updated>2013-07-17T16:16:35+08:00</updated>
+  <id>http://alvinhu.com/</id>
+  <author>
+    <name><![CDATA[alvinhu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何在Windows 8中离线安装.NET Framework 3.5]]></title>
+    <link href="http://alvinhu.com/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/"/>
+    <updated>2013-07-17T15:29:00+08:00</updated>
+    <id>http://alvinhu.com/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline</id>
+    <content type="html"><![CDATA[<p>今天在Win8虚拟机上安装同步助手，提示需要安装.NET Framework 2.0才可以运行。按照提示点击安装，下载完成以后系统又提示要安装3.5。没办法只能接着再装，然后在下载所需文件的地方卡了两小时了。</p>
+
+<p>实在是忍无可忍，只能找度娘了。网上有教程说直接在<code>启动或关闭 Windows 功能</code>里打开3.5就可以了，满怀欣喜的试了一下，结果还是卡在下载文件那一步。坑爹的微软就不能把用户体验做好一点吗！</p>
+
+<p>按照这么多年的经验，既然下载文件有问题，那咱就下载离线安装包。网上找了个完整版离线安装包，等了半小时总算下完了，开心啊！我就不信搞不定你！结果人算不如天算，完整版离线安装包在安装的时候还要下载文件！我当时真是要哭了！彻底拜服微软的强大了！</p>
+
+<!-- more -->
+
+
+<p>本着越挫越勇的精神，今天跟微软干上了！度娘不行咱找谷哥！最后找到用命令行从Win8镜像文件或安装光盘里安装3.5，不过我发现从C盘里也可以直接安装，连镜像文件或安装光盘都省了！</p>
+
+<ul>
+<li>按下<code>Win+X</code></li>
+<li>点击<code>命令提示符(管理员)</code></li>
+<li>运行下面的命令：</li>
+</ul>
+
+
+<p><code>
+DISM.exe /Online /Enable-Feature /FeatureName:NetFX3 /Source:C:\Windows\WinSxS
+</code></p>
+
+<p>大功告成！</p>
+]]></content>
+  </entry>
+  
+</feed>

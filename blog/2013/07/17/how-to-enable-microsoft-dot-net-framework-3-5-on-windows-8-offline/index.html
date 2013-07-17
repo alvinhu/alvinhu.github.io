@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>SSL的单向认证和双向认证 - alvin hu</title>
+  <title>如何在Windows 8中离线安装.NET Framework 3.5 - alvin hu</title>
   <meta name="author" content="alvinhu">
 
   
-  <meta name="description" content="SSL的单向认证和双向认证">
-  <meta name="keywords" content="SSL, 单向认证, 双向认证">
+  <meta name="description" content="介绍在Windows 8中离线安装.NET Framework 3.5的方法">
+  <meta name="keywords" content="Microsoft, .NET Framework 3.5, Windows 8">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">
+  <link rel="canonical" href="http://alvinhu.com/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -88,7 +88,7 @@
   <header>
     
       
-        <h1 class="entry-title">SSL的单向认证和双向认证</h1>
+        <h1 class="entry-title">如何在Windows 8中离线安装.NET Framework 3.5</h1>
       
     
     
@@ -105,7 +105,7 @@
   
 
 
-<time datetime="2013-06-20T12:28:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+<time datetime="2013-07-17T15:29:00+08:00" pubdate data-updated="true">Jul 17<span>th</span>, 2013</time>
         
          | <a href="#comments">Comments</a>
         
@@ -114,33 +114,29 @@
   </header>
 
 
-<div class="entry-content"><p>为了便于更好的认识和理解SSL协议，这里着重介绍SSL协议的握手流程。SSL协议既用到了公钥加密技术又用到了对称加密技术，对称加密技术虽然比公钥加密技术的速度快，可是公钥加密技术提供了更好的身份认证技术。SSL的握手流程非常有效的让客户端和服务器之间完成相互之间的身份认证。</p>
+<div class="entry-content"><p>今天在Win8虚拟机上安装同步助手，提示需要安装.NET Framework 2.0才可以运行。按照提示点击安装，下载完成以后系统又提示要安装3.5。没办法只能接着再装，然后在下载所需文件的地方卡了两小时了。</p>
+
+<p>实在是忍无可忍，只能找度娘了。网上有教程说直接在<code>启动或关闭 Windows 功能</code>里打开3.5就可以了，满怀欣喜的试了一下，结果还是卡在下载文件那一步。坑爹的微软就不能把用户体验做好一点吗！</p>
+
+<p>按照这么多年的经验，既然下载文件有问题，那咱就下载离线安装包。网上找了个完整版离线安装包，等了半小时总算下完了，开心啊！我就不信搞不定你！结果人算不如天算，完整版离线安装包在安装的时候还要下载文件！我当时真是要哭了！彻底拜服微软的强大了！</p>
 
 <!-- more -->
 
 
-<h3>SSL握手流程</h3>
+<p>本着越挫越勇的精神，今天跟微软干上了！度娘不行咱找谷哥！最后找到用命令行从Win8镜像文件或安装光盘里安装3.5，不过我发现从C盘里也可以直接安装，连镜像文件或安装光盘都省了！</p>
 
-<ol>
-<li>客户端向服务器发送ClientHello消息，说明它支持的最高TLS协议版本，随机数、密码算法列表及压缩方法。</li>
-<li>服务器回复ServerHello消息，包含基于客户端ClientHello消息所选择的TLS协议版本，随机数、密码算法列表及压缩方法。服务器选择的协议版本为客户端和服务器都支持的最高版本。</li>
-<li>当双方知道了连接参数，服务器向客户端发送证书。</li>
-<li>客户端验证服务器证书的合法性，包括：服务器证书是否过期、发行服务器证书的CA是否可靠、发行CA的公钥能否正确解开服务器证书的发行CA的数字签名、服务器证书上的域名是否和服务器的实际域名相匹配。如果合法性验证没有通过，通讯将断开；如果合法性验证通过，将继续进行第5步。</li>
-<li>客户端随机产生一个用于后面通讯的“对称密码”，然后用服务器的公钥（服务器的公钥从步骤3中的服务器证书中获得）对其加密，然后将加密后的“预主密码”传给服务器。</li>
-<li>如果服务器要求客户端的身份认证（在握手过程中为可选），客户端可以建立一个随机数然后对其进行数据签名，将这个含有签名的随机数和客户端自己的证书以及加密过的“预主密码”一起传给服务器。</li>
-<li>如果服务器要求客户端的身份认证，服务器必须检验客户端证书和签名随机数的合法性，具体的合法性验证包括：客户端证书是否过期，发行客户端证书的CA是否可靠，发行CA的公钥能否正确解开客户端证书的发行CA的数字签名，检查客户端证书是否在证书废止列表（CRL）中。如果合法性验证没有通过，通讯立刻中断；如果合法性验证通过，服务器将用自己的私钥解开加密的“预主密码”，然后执行一系列步骤来产生主通讯密码（客户端也将通过同样的方法产生相同的主通讯密码）。</li>
-<li>服务器和客户端用相同的主密码即“通话密码”，一个对称密钥用于SSL协议的安全数据通讯的加解密通讯。同时在SSL通讯过程中还要完成数据通讯的完整性，防止数据通讯中的任何变化。</li>
-<li>客户端向服务器发出信息，指明后面的数据通讯将使用的步骤8中的主密码为对称密钥，同时通知服务器客户端的握手过程结束。</li>
-<li>服务器向客户端发出信息，指明后面的数据通讯将使用的步骤8中的主密码为对称密钥，同时通知客户端服务器的握手过程结束。</li>
-<li>SSL的握手部分结束，SSL安全通道的数据通讯开始，客户端和服务器开始使用相同的对称密钥进行数据通讯，同时进行通讯完整性的检验。</li>
-</ol>
+<ul>
+<li>按下<code>Win+X</code></li>
+<li>点击<code>命令提示符(管理员)</code></li>
+<li>运行下面的命令：</li>
+</ul>
 
 
-<h3>单向认证vs双向认证</h3>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DISM.exe /Online /Enable-Feature /FeatureName:NetFX3 /Source:C:\Windows\WinSxS</span></code></pre></td></tr></table></div></figure>
 
-<p>上面所述的是<strong>双向认证SSL协议</strong>的具体通讯过程，这种情况要求服务器和客户端双方都有证书。<strong>单向认证SSL协议</strong>不需要客户端拥有CA证书，具体的流程相对于上面的步骤，只需将服务器验证客户端证书的步骤去掉，以及在协商对称密码方案，对称通话密钥时，服务器发送给客户端的是没有加过密的（这并不影响SSL过程的安全性）密码方案。这样，双方具体的通讯内容，就是加密过的数据。如果有第三方攻击，获得的只是加密的数据，第三方要获得有用的信息，就需要对加密的数据进行解密，这时候的安全就依赖于密码方案的安全。而幸运的是，目前所用的密码方案，只要通讯密钥长度足够的长，就足够的安全。这也是我们强调要求使用128位加密通讯的原因。</p>
 
-<p>一般Web应用都是采用单向认证的，原因很简单，用户数目广泛，且无需做在通讯层做用户身份验证，一般都在应用逻辑层来保证用户的合法登入。但如果是企业应用对接，情况就不一样，可能会要求对客户端（相对而言）做身份验证。这时就需要做双向认证。</p>
+<p>大功告成！</p>
 </div>
 
 
@@ -163,12 +159,12 @@
   
 
 
-<time datetime="2013-06-20T12:28:00+08:00" pubdate data-updated="true">Jun 20<span>th</span>, 2013</time>
+<time datetime="2013-07-17T15:29:00+08:00" pubdate data-updated="true">Jul 17<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ssl/'>SSL</a>
+    <a class='category' href='/blog/categories/windows-8/'>Windows 8</a>
   
 </span>
 
@@ -177,7 +173,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/" data-via="" data-counturl="http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" data-via="" data-counturl="http://alvinhu.com/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" >Tweet</a>
   
   
   
@@ -186,10 +182,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/" title="Previous Post: IIS8中使用OpenSSL来创建CA并且签发SSL证书">&laquo; IIS8中使用OpenSSL来创建CA并且签发SSL证书</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/" title="Previous Post: SSL的单向认证和双向认证">&laquo; SSL的单向认证和双向认证</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" title="Next Post: 如何在Windows 8中离线安装.NET Framework 3.5">如何在Windows 8中离线安装.NET Framework 3.5 &raquo;</a>
       
     </p>
   </footer>
@@ -198,7 +192,7 @@
   <section>
     <h1>Comments</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-<div class="ds-thread" data-title="SSL的单向认证和双向认证"></div>
+<div class="ds-thread" data-title="如何在Windows 8中离线安装.NET Framework 3.5"></div>
 <script type="text/javascript">
   var duoshuoQuery = {short_name:"alvinhu"};
   (function() {
