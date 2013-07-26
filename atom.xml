@@ -4,7 +4,7 @@
   <title><![CDATA[alvin hu]]></title>
   <link href="http://alvinhu.com/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-07-27T02:58:47+08:00</updated>
+  <updated>2013-07-27T03:01:14+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -72,8 +72,6 @@
 
 <p>具体中间人攻击的定义、方法和防御措施等可以参考<a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack">维基百科</a>或者<a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack">百度百科</a>。以下两个故事用来说明中间人攻击的大致流程。</p>
 
-<hr />
-
 <h3>西方言情简化版</h3>
 
 <p>从前有一枚高富帅叫杰克，女友是白富美女神爱丽丝，却苦于天各一方，只能求书信往来以解相思之苦。奈何时局动荡、人心不古，觊觎女神者比比皆是。书信若为明文，定要被那中转信件的屌丝皮特拆看，而后从中作祟，行不轨之事。</p>
@@ -109,8 +107,6 @@
 <p>不过道高一尺、魔高一丈，皮特若能控制那公证可信之处，待杰克去验证时就可以做手脚，让杰克误以为伪造密信确为爱丽丝所发，于是继续悲剧……这种手法叫做伪造证书。</p>
 
 <p>从这个故事可以看出中间人攻击就是躲在中间的小人，让通信的双方误以为跟自己通信的就是TA，而小人在中间获取双方的重要信息。</p>
-
-<hr />
 
 <h3>三国通信加强版</h3>
 
