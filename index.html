@@ -140,6 +140,63 @@
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/">通过SSL Pinning提高iOS应用的安全性</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T22:47:00+08:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>关于SSL Pinning的技术在国外有很多文章提到，但是还没有找到一篇相关的中文文档。因为在开发中碰到这个问题，所以查阅了很多相关文章，在此基于自己对SSL Pinning的理解，再融合一些其他资料，整理了一下写了这么一篇文章，既给自己做个备份，也给大家做个参考。写的好的给个掌声，写的不好请留言指正。</p>
+
+<h2>背景</h2>
+
+<p>在开发Client-Server架构的手机应用时，如果问到如何提高数据传输的安全性，肯定很多程序员第一时间会回答TLS/SSL。确实，对比普通的HTTP协议数据传输，SSL可以大大提高数据的安全性，因为所有传输过程中的数据都是经过加密的。如果用户在机场、咖啡厅等开放式的wifi环境下使用应用，就算有攻击者通过技术手段截取了客户端与服务器之间传输的数据，对于他们来说也不过是一些加密过的垃圾。</p>
+
+<p>表面上看这样已经足够安全了，但是危险就在身边。虽然SSL解决了内容加密的问题，但是在这个兵火战乱的年代，和你通信的是不是真正的服务器呢？就算对方能够提供证书，这年头证书也可以伪造，<a href="http://tech.sina.com.cn/i/2011-08-31/12096005012.shtml">2011年就爆发了一次大规模的SSL证书安全攻击，受牵连的公司包括谷歌</a>。</p>
+
+<p><img src="/images/secure-ios-apps-on-ssl-pinning/github-get-attacked.jpg" alt="GitHub被攻击" /></p>
+
+<p>下面我们举例说说为什么有了证书用了加密还会被攻击吧！</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
         <h1 class="entry-title"><a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">SSL的单向认证和双向认证</a></h1>
       
     
@@ -470,9 +527,9 @@
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
 <li class='category'><a href='/blog/categories/omnifocus/'>OmniFocus (1)</a></li>
 <li class='category'><a href='/blog/categories/openssl/'>OpenSSL (1)</a></li>
-<li class='category'><a href='/blog/categories/ssl/'>SSL (2)</a></li>
+<li class='category'><a href='/blog/categories/ssl/'>SSL (3)</a></li>
 <li class='category'><a href='/blog/categories/windows/'>Windows (1)</a></li>
-<li class='category'><a href='/blog/categories/ios/'>iOS (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
 
   </ul>
 </section><section>
@@ -481,6 +538,10 @@
     
       <li class="post">
         <a href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/">如何在Windows 8中离线安装.NET Framework 3.5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/">通过SSL Pinning提高iOS应用的安全性</a>
       </li>
     
       <li class="post">
@@ -493,10 +554,6 @@
     
       <li class="post">
         <a href="/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/">如何修复OmniFocus中的剪辑快捷键</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller/">快速简单自定义UINavigationController中返回按钮的样式和文字</a>
       </li>
     
   </ul>

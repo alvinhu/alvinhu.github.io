@@ -18,17 +18,21 @@
         <loc>
             http://alvinhu.com/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/
         </loc>
-        <lastmod>2013-06-21T06:05:16+08:00</lastmod>
+        <lastmod>2013-07-27T02:35:06+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://alvinhu.com/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/
         </loc>
-        <lastmod>2013-06-22T15:14:50+08:00</lastmod>
+        <lastmod>2013-07-27T02:43:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://alvinhu.com/blog/2013/06/20/one-way-and-two-way-ssl-authentication/</loc>
         <lastmod>2013-07-17T16:15:22+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/</loc>
+        <lastmod>2013-07-27T02:41:10+08:00</lastmod>
     </url>
     <url>
         <loc>
@@ -38,14 +42,14 @@
     </url>
     <url>
         <loc>http://alvinhu.com/blog/archives/</loc>
-        <lastmod>2013-07-17T16:19:21+08:00</lastmod>
+        <lastmod>2013-07-27T02:43:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://alvinhu.com/</loc>
-        <lastmod>2013-07-17T16:19:21+08:00</lastmod>
+        <lastmod>2013-07-27T02:43:35+08:00</lastmod>
     </url>
     <url>
         <loc>http://alvinhu.com/robots.txt</loc>
-        <lastmod>2013-06-20T02:24:52+08:00</lastmod>
+        <lastmod>2013-07-26T19:04:54+08:00</lastmod>
     </url>
 </urlset>

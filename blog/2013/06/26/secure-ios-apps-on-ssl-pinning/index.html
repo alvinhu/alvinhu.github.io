@@ -1,24 +1,120 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: iOS | alvin hu]]></title>
-  <link href="http://alvinhu.com/blog/categories/ios/atom.xml" rel="self"/>
-  <link href="http://alvinhu.com/"/>
-  <updated>2013-07-27T02:44:08+08:00</updated>
-  <id>http://alvinhu.com/</id>
-  <author>
-    <name><![CDATA[alvinhu]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>通过SSL Pinning提高iOS应用的安全性 - alvin hu</title>
+  <meta name="author" content="alvinhu">
 
   
-  <entry>
-    <title type="html"><![CDATA[通过SSL Pinning提高iOS应用的安全性]]></title>
-    <link href="http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/"/>
-    <updated>2013-06-26T22:47:00+08:00</updated>
-    <id>http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
+  <meta name="description" content="通过SSL Pinning提高iOS应用的安全性">
+  <meta name="keywords" content="SSL Pinning, Certificate Pinning, MITM, MIM, MITMA, 中间人攻击, iOS, security, AFNetworking">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="alvin hu" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41589843-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">ah</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div>
+  <h1><a href="/">alvin hu</a></h1>
+  
+    <h2>A blog of iOS developer.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:alvinhu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">通过SSL Pinning提高iOS应用的安全性</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T22:47:00+08:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
+        
+         | <a href="#comments">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
 
 <p>关于SSL Pinning的技术在国外有很多文章提到，但是还没有找到一篇相关的中文文档。因为在开发中碰到这个问题，所以查阅了很多相关文章，在此基于自己对SSL Pinning的理解，再融合一些其他资料，整理了一下写了这么一篇文章，既给自己做个备份，也给大家做个参考。写的好的给个掌声，写的不好请留言指正。</p>
 
@@ -122,20 +218,17 @@
 </ul>
 
 
-<p>```</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define _AFNETWORKING_PIN_SSL_CERTIFICATES_</span></code></pre></td></tr></table></div></figure>
 
-<h1>define <em>AFNETWORKING_PIN_SSL_CERTIFICATES</em></h1>
-
-<p>```</p>
 
 <p>如果是自签名的证书还需要加上：</p>
 
-<p>```</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_</span></code></pre></td></tr></table></div></figure>
 
-<h1>define <em>AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES</em></h1>
 
-<p>```
-否则在请求服务器的时候会弹出提示框说该服务器证书为不可信任的机构颁发</p>
+<p>否则在请求服务器的时候会弹出提示框说该服务器证书为不可信任的机构颁发</p>
 
 <ul>
 <li>然后把服务器证书添加到应用中，证书文件取什么名字无所谓，后缀必须是cer，并且是DER编码的证书</li>
@@ -149,44 +242,66 @@
 </ul>
 
 
-<p><code>
-[self setDefaultSSLPinningMode:AFSSLPinningModePublicKey];
-</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[self setDefaultSSLPinningMode:AFSSLPinningModePublicKey];</span></code></pre></td></tr></table></div></figure>
+
 
 <p>具体位置参考如下：</p>
 
-<p>```</p>
-
-<h1>import &ldquo;HPAPIClient.h&rdquo;</h1>
-
-<h1>import &ldquo;AFHTTPRequestOperationLogger.h&rdquo;</h1>
-
-<p>@implementation HPAPIClient</p>
-
-<ul>
-<li><p>(HPAPIClient <em>)sharedClient
-{
-  static HPAPIClient </em>sharedClient = nil;
-  static dispatch_once_t onceToken;</p>
-
-<p>  dispatch_once(&amp;onceToken, ^{
-      sharedClient = [[HPAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kAPIBaseURL]];
-  });
-  return sharedClient;
-}</p></li>
-<li><p>(id)initWithBaseURL:(NSURL *)URL
-{
-  self = [super initWithBaseURL:URL];
-  if (self) {
-      [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-      [self setDefaultHeader:@&ldquo;Accept&rdquo; value:@&ldquo;application/json&rdquo;];
-      [self setDefaultSSLPinningMode:AFSSLPinningModePublicKey];
-  }
-  return self;
-}
-&hellip;
-```</p></li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import "HPAPIClient.h"
+</span><span class='line'>#import "AFHTTPRequestOperationLogger.h"
+</span><span class='line'>
+</span><span class='line'>@implementation HPAPIClient
+</span><span class='line'>
+</span><span class='line'>+ (HPAPIClient *)sharedClient
+</span><span class='line'>{
+</span><span class='line'>    static HPAPIClient *sharedClient = nil;
+</span><span class='line'>    static dispatch_once_t onceToken;
+</span><span class='line'>    
+</span><span class='line'>    dispatch_once(&onceToken, ^{
+</span><span class='line'>        sharedClient = [[HPAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kAPIBaseURL]];
+</span><span class='line'>    });
+</span><span class='line'>    return sharedClient;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (id)initWithBaseURL:(NSURL *)URL
+</span><span class='line'>{
+</span><span class='line'>    self = [super initWithBaseURL:URL];
+</span><span class='line'>    if (self) {
+</span><span class='line'>        [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+</span><span class='line'>        [self setDefaultHeader:@"Accept" value:@"application/json"];
+</span><span class='line'>        [self setDefaultSSLPinningMode:AFSSLPinningModePublicKey];
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>总结</h2>
@@ -201,84 +316,168 @@
 <li><a href="http://www.zhihu.com/question/20744215">什么是 TLS 中间人攻击</a></li>
 </ul>
 
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[快速简单自定义UINavigationController中返回按钮的样式和文字]]></title>
-    <link href="http://alvinhu.com/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller/"/>
-    <updated>2012-11-28T17:40:00+08:00</updated>
-    <id>http://alvinhu.com/blog/2012/11/28/customize-appearance-and-title-of-back-button-in-uinavigationcontroller</id>
-    <content type="html"><![CDATA[<p>在开发iPhone应用程序的时候，很多时候都会用到UINavigationController，其中的返回按钮（Back Button）里的文字会自动调用前一个UIViewController的标题。而且在早期iOS版本的时候想自定义返回按钮比较麻烦。好在iOS5出来以后提供了UIAppearance以方便开发者自定义iOS的风格样式，这个时候自定义返回按钮的样式就比较容易了：</p>
 
-<p>``` objc
-&ndash; (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions
-{</p>
+<span class="byline author vcard">Posted by <span class="fn">alvinhu</span></span>
 
-<pre><code>// 自定义UIBarButtonItem返回按钮背景图片
-UIImage *backButton = [[UIImage imageNamed:@"BackButton.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15.0, 0, 5.0)];
-UIImage *backButtonHighlighted = [[UIImage imageNamed:@"BackButtonHighlighted.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 15.0, 0, 5.0)];
-[[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButton forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-[[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonHighlighted forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-
-// 自定义UIBarButtonItem返回按钮标题文字位置
-[[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-1.0, 0) forBarMetrics:UIBarMetricsDefault];
-
-return YES;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>上面的代码自定义了返回按钮的样式。</p>
-
-<!-- more -->
+      
 
 
-<p>如果我们想把返回按钮里面的文字改成<code>返回</code>，简单的办法就是：</p>
-
-<p>``` objc
-&ndash; (void)viewDidLoad
-{</p>
-
-<pre><code>[super viewDidLoad];
-
-UIBarButtonItem *backButton = [[UIBarButtonItem alloc] init];
-backButton.title = @"返回";
-self.navigationItem.backBarButtonItem = backButton;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>这里我们假设打开了ARC，所以不需要<code>[backButton release]</code>。</p>
-
-<p>上面的办法只是一次性定义返回按钮的文字，如果需要把所有返回按钮的文字都改成<code>返回</code>，那就需要用到<code>Category</code>：</p>
-
-<p>``` objc UINavigationItem+MyBackButton.h
-@interface UINavigationItem (MyBackButton)</p>
-
-<p>@end
-```</p>
-
-<p>``` objc UINavigationItem+MyBackButton.m</p>
-
-<h1>import &ldquo;UINavigationItem+MyBackButton.h&rdquo;</h1>
-
-<p>@implementation UINavigationItem (MyBackButton)</p>
-
-<ul>
-<li>(UIBarButtonItem *)backBarButtonItem
-{
-  return [[UIBarButtonItem alloc] initWithTitle:@&ldquo;返回&rdquo; style:UIBarButtonItemStylePlain target:nil action:nil];
-}
-@end
-```</li>
-</ul>
 
 
-<p>把上面两个文件拖到项目里面就可以了。是不是很简单！</p>
-]]></content>
-  </entry>
+
+
+
+
   
-</feed>
+
+
+<time datetime="2013-06-26T22:47:00+08:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ssl/'>SSL</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/" data-via="" data-counturl="http://alvinhu.com/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/" title="Previous Post: SSL的单向认证和双向认证">&laquo; SSL的单向认证和双向认证</a>
+      
+      
+        <a class="basic-alignment right articlenav" href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" title="Next Post: 如何在Windows 8中离线安装.NET Framework 3.5">如何在Windows 8中离线安装.NET Framework 3.5 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread" data-title="通过SSL Pinning提高iOS应用的安全性"></div>
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"alvinhu"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+<!-- Duoshuo Comment END --></div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (1)</a></li>
+<li class='category'><a href='/blog/categories/omnifocus/'>OmniFocus (1)</a></li>
+<li class='category'><a href='/blog/categories/openssl/'>OpenSSL (1)</a></li>
+<li class='category'><a href='/blog/categories/ssl/'>SSL (3)</a></li>
+<li class='category'><a href='/blog/categories/windows/'>Windows (1)</a></li>
+<li class='category'><a href='/blog/categories/ios/'>iOS (2)</a></li>
+
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/">如何在Windows 8中离线安装.NET Framework 3.5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/secure-ios-apps-on-ssl-pinning/">通过SSL Pinning提高iOS应用的安全性</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/20/one-way-and-two-way-ssl-authentication/">SSL的单向认证和双向认证</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/12/creating-a-certificate-authority-and-signing-the-ssl-certificates-using-openssl-in-iis8/">IIS8中使用OpenSSL来创建CA并且签发SSL证书</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/29/how-to-fix-omnifocus-quick-clippings-shortcut/">如何修复OmniFocus中的剪辑快捷键</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Recent Comments</h1>
+  <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></ul>
+  <!--多说js加载开始，一个页面只需要加载一次 -->
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alvinhu"};
+    function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+  <!--多说js加载结束，一个页面只需要加载一次 -->
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - alvinhu -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
