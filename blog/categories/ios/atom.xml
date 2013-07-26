@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iOS | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-07-27T03:01:14+08:00</updated>
+  <updated>2013-07-27T03:06:11+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -118,7 +118,7 @@
 </ul>
 
 
-<p>```</p>
+<p>``` objc</p>
 
 <h1>define <em>AFNETWORKING_PIN_SSL_CERTIFICATES</em></h1>
 
@@ -126,7 +126,7 @@
 
 <p>如果是自签名的证书还需要加上：</p>
 
-<p>```</p>
+<p>``` objc</p>
 
 <h1>define <em>AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES</em></h1>
 
@@ -145,13 +145,13 @@
 </ul>
 
 
-<p><code>
+<p><code>objc
 [self setDefaultSSLPinningMode:AFSSLPinningModePublicKey];
 </code></p>
 
 <p>具体位置参考如下：</p>
 
-<p>```</p>
+<p>``` objc</p>
 
 <h1>import &ldquo;HPAPIClient.h&rdquo;</h1>
 
