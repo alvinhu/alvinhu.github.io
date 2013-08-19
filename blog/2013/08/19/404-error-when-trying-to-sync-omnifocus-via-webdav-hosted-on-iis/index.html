@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>The Octopress - alvin hu</title>
+  <title>解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题 - alvin hu</title>
   <meta name="author" content="alvinhu">
 
   
-  <meta name="description" content="alvin's first blog in Octopress">
-  <meta name="keywords" content="Octopress, blog">
+  <meta name="description" content="解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题">
+  <meta name="keywords" content="WebDav, IIS, OmniFocus同步, 404">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alvinhu.com/blog/2012/11/14/the-octopress/">
+  <link rel="canonical" href="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -88,7 +88,7 @@
   <header>
     
       
-        <h1 class="entry-title">The Octopress</h1>
+        <h1 class="entry-title">解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题</h1>
       
     
     
@@ -105,7 +105,7 @@
   
 
 
-<time datetime="2012-11-14T23:38:00+08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2012</time>
+<time datetime="2013-08-19T22:00:00+08:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
         
          | <a href="#comments">Comments</a>
         
@@ -114,17 +114,28 @@
   </header>
 
 
-<div class="entry-content"><p>一直以来都很想建个自己的blog，用来记录和分享自己在工作和生活当中一些东西。</p>
+<div class="entry-content"><p>我同时在Mac，iPhone，iPad下面使用OmniFocus，所以不可避免的需要三个设备之间的数据同步。OmniFocus在这方面做的还是很不错的，提供了多种同步方式。</p>
 
-<p>曾经用过QQ空间，试过WordPress，总感觉不是自己的blog，没有那种冲动和欲望去更新。</p>
+<ul>
+<li>OmniFocus Sync：OmniFocus官方服务器免费同步</li>
+<li>Bonjour：局域网同步</li>
+<li>磁盘：通过文件同步</li>
+<li>自定义WebDAV：通过第三方WebDAV服务同步</li>
+</ul>
 
-<p>因为在iOS开发中经常关注一些国外的同行的blog，发现他们都是用的Octopress，感觉更方面都挺不错的：清爽、代码高亮等等，非常符合自己的口味。</p>
 
-<p>进入官网看了一下，安装起来跟传统的WP之类的blog程序完全不是一条路，看着有点迷糊，而且连维护和发布都是在本地操作的，真是有点丈二和尚摸不着头脑。</p>
+<p>其实第一种官方同步就已经可以满足需求了，但是由于官方服务器在国外，所以同步速度几乎无法忍受。而第二、第三种都不太方便，比方说在外面拿着手机就无法与办公室的笔记本同步了。最为强大的还是第三种，可以跟任何标准的WebDAV服务器同步，国外有一些免费的WebDAV服务公司，但是跟官方一样，速度太慢，而国内几乎很少提供免费的WebDAV，所以我就自己搭了一个基于IIS的WebDAV服务器。</p>
 
-<p>但是经过几个小时的折腾，总算是搭起来了，现在发表着第一篇blog感慨颇深啊，总算是圆了自己的一个梦，以后有地方积累自己的点点滴滴了。</p>
+<!-- more -->
 
-<p>先发个简单的开篇，以后再慢慢完善吧！</p>
+
+<p>IIS开通WebDAV很简单，网上很多教程，这里就不再赘述。在顺利搭建好WebDAV以后，发现通过程序连接WebDAV服务器没问题，但是同步的时候报404错误。谷歌里找了好久都没找到解决方案，最后在官方的<a href="http://www.omnigroup.com/m/products/omnifocus/support/faq/">FAQ</a>里找到这么一段话：</p>
+
+<blockquote><p>We have had a report that in order to get syncing working on IIS 6.0-hosted WebDAV, you have to configure IIS to add a MIME type of &ldquo;Text&rdquo; for files with the &ldquo;.client&rdquo; extension. (These are the files OmniFocus uses to identify the different clients which sync with a given database.)</p></blockquote>
+
+<p>意思就是有一些用户反映跟我一样的问题，解决方案就是配置IIS，在MIME的“Text”下面增加一个“.client”的扩展名，这个扩展名的文件是OmniFocus用来定义不同的设备同步时对应不同的数据库。因为IIS默认不支持这个扩展名，所以WebDAV是不允许创建.client文件的。</p>
+
+<p>按照文中所说编辑一下，果然同步成功！现在可以享受三个设备快速同步的乐趣了，哈哈！</p>
 </div>
 
 
@@ -147,12 +158,12 @@
   
 
 
-<time datetime="2012-11-14T23:38:00+08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2012</time>
+<time datetime="2013-08-19T22:00:00+08:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
+    <a class='category' href='/blog/categories/omnifocus/'>OmniFocus</a>
   
 </span>
 
@@ -161,7 +172,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2012/11/14/the-octopress/" data-via="" data-counturl="http://alvinhu.com/blog/2012/11/14/the-octopress/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/" data-via="" data-counturl="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/" >Tweet</a>
   
   
   
@@ -170,8 +181,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left articlenav" href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" title="Previous Post: 如何在Windows 8中离线安装.NET Framework 3.5">&laquo; 如何在Windows 8中离线安装.NET Framework 3.5</a>
       
-        <a class="basic-alignment right articlenav" href="/blog/2012/11/28/about-mac-os-x-secondary-click/" title="Next Post: 关于Mac OS X右键菜单">关于Mac OS X右键菜单 &raquo;</a>
       
     </p>
   </footer>
@@ -180,7 +191,7 @@
   <section>
     <h1>Comments</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-<div class="ds-thread" data-title="The Octopress"></div>
+<div class="ds-thread" data-title="解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题"></div>
 <script type="text/javascript">
   var duoshuoQuery = {short_name:"alvinhu"};
   (function() {

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OmniFocus | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/omnifocus/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-07-27T03:06:11+08:00</updated>
+  <updated>2013-08-19T22:37:52+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题]]></title>
+    <link href="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/"/>
+    <updated>2013-08-19T22:00:00+08:00</updated>
+    <id>http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis</id>
+    <content type="html"><![CDATA[<p>我同时在Mac，iPhone，iPad下面使用OmniFocus，所以不可避免的需要三个设备之间的数据同步。OmniFocus在这方面做的还是很不错的，提供了多种同步方式。</p>
+
+<ul>
+<li>OmniFocus Sync：OmniFocus官方服务器免费同步</li>
+<li>Bonjour：局域网同步</li>
+<li>磁盘：通过文件同步</li>
+<li>自定义WebDAV：通过第三方WebDAV服务同步</li>
+</ul>
+
+
+<p>其实第一种官方同步就已经可以满足需求了，但是由于官方服务器在国外，所以同步速度几乎无法忍受。而第二、第三种都不太方便，比方说在外面拿着手机就无法与办公室的笔记本同步了。最为强大的还是第三种，可以跟任何标准的WebDAV服务器同步，国外有一些免费的WebDAV服务公司，但是跟官方一样，速度太慢，而国内几乎很少提供免费的WebDAV，所以我就自己搭了一个基于IIS的WebDAV服务器。</p>
+
+<!-- more -->
+
+
+<p>IIS开通WebDAV很简单，网上很多教程，这里就不再赘述。在顺利搭建好WebDAV以后，发现通过程序连接WebDAV服务器没问题，但是同步的时候报404错误。谷歌里找了好久都没找到解决方案，最后在官方的<a href="http://www.omnigroup.com/m/products/omnifocus/support/faq/">FAQ</a>里找到这么一段话：</p>
+
+<blockquote><p>We have had a report that in order to get syncing working on IIS 6.0-hosted WebDAV, you have to configure IIS to add a MIME type of &ldquo;Text&rdquo; for files with the &ldquo;.client&rdquo; extension. (These are the files OmniFocus uses to identify the different clients which sync with a given database.)</p></blockquote>
+
+<p>意思就是有一些用户反映跟我一样的问题，解决方案就是配置IIS，在MIME的“Text”下面增加一个“.client”的扩展名，这个扩展名的文件是OmniFocus用来定义不同的设备同步时对应不同的数据库。因为IIS默认不支持这个扩展名，所以WebDAV是不允许创建.client文件的。</p>
+
+<p>按照文中所说编辑一下，果然同步成功！现在可以享受三个设备快速同步的乐趣了，哈哈！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何修复OmniFocus中的剪辑快捷键]]></title>
