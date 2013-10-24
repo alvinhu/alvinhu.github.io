@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mac | alvin hu]]></title>
   <link href="http://alvinhu.com/blog/categories/mac/atom.xml" rel="self"/>
   <link href="http://alvinhu.com/"/>
-  <updated>2013-10-25T03:30:37+08:00</updated>
+  <updated>2013-10-25T03:32:40+08:00</updated>
   <id>http://alvinhu.com/</id>
   <author>
     <name><![CDATA[alvinhu]]></name>
@@ -27,6 +27,9 @@
 <p><code>
 ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 </code></p>
+
+<!-- more -->
+
 
 <p>RubyGems是一个包管理框架，提供了ruby社区gem的托管服务，用于方便地下载、安装和使用ruby软件包。ruby软件包被称为gem，包含了ruby应用或库。安装RubyGems，需要先下载安装包，然后解压开后运行：</p>
 
