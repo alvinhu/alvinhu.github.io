@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题 - alvin hu</title>
+  <title>brew, gem, rvm and bundler - alvin hu</title>
   <meta name="author" content="alvinhu">
 
   
-  <meta name="description" content="解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题">
-  <meta name="keywords" content="WebDav, IIS, OmniFocus同步, 404">
+  <meta name="description" content="介绍brew, gem, rvm和bundler的区别">
+  <meta name="keywords" content="brew, Homebrew, gem, RubyGems, rvm, bundler, Ruby">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/">
+  <link rel="canonical" href="http://alvinhu.com/blog/2013/10/25/brew-gem-rvm-and-bundler/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -88,7 +88,7 @@
   <header>
     
       
-        <h1 class="entry-title">解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题</h1>
+        <h1 class="entry-title">Brew, Gem, Rvm and Bundler</h1>
       
     
     
@@ -105,7 +105,7 @@
   
 
 
-<time datetime="2013-08-19T22:00:00+08:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
+<time datetime="2013-10-25T02:43:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
         
          | <a href="#comments">Comments</a>
         
@@ -114,28 +114,41 @@
   </header>
 
 
-<div class="entry-content"><p>我同时在Mac，iPhone，iPad下面使用OmniFocus，所以不可避免的需要三个设备之间的数据同步。OmniFocus在这方面做的还是很不错的，提供了多种同步方式。</p>
+<div class="entry-content"><p>brew, gem, rvm, bundler分别为<a href="http://brew.sh">Homebrew</a>, <a href="http://rubygems.org">RubyGems</a>, <a href="http://rvm.io">Ruby Version Manager</a>, <a href="http://bundler.io">Bundler</a>的简称（执行命令）。</p>
 
-<ul>
-<li>OmniFocus Sync：OmniFocus官方服务器免费同步</li>
-<li>Bonjour：局域网同步</li>
-<li>磁盘：通过文件同步</li>
-<li>自定义WebDAV：通过第三方WebDAV服务同步</li>
-</ul>
+<p>Homebrew为Mac OS X提供软件包的管理。Homebrew将软件包分装到单独的目录，然后symlink到<code>/usr/local</code>中。Homebrew不会把文件安装到预置目录之外，所以可以将Homebrew安装到任何位置。它完全基于git和ruby。使用gem来安装gems，用brew来搞定他们的依赖包。</p>
 
+<p>brew的安装：</p>
 
-<p>其实第一种官方同步就已经可以满足需求了，但是由于官方服务器在国外，所以同步速度几乎无法忍受。而第二、第三种都不太方便，比方说在外面拿着手机就无法与办公室的笔记本同步了。最为强大的还是第三种，可以跟任何标准的WebDAV服务器同步，国外有一些免费的WebDAV服务公司，但是跟官方一样，速度太慢，而国内几乎很少提供免费的WebDAV，所以我就自己搭了一个基于IIS的WebDAV服务器。</p>
-
-<!-- more -->
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"</span></code></pre></td></tr></table></div></figure>
 
 
-<p>IIS开通WebDAV很简单，网上很多教程，这里就不再赘述。在顺利搭建好WebDAV以后，发现通过程序连接WebDAV服务器没问题，但是同步的时候报404错误。谷歌里找了好久都没找到解决方案，最后在官方的<a href="http://www.omnigroup.com/m/products/omnifocus/support/faq/">FAQ</a>里找到这么一段话：</p>
+<p>RubyGems是一个包管理框架，提供了ruby社区gem的托管服务，用于方便地下载、安装和使用ruby软件包。ruby软件包被称为gem，包含了ruby应用或库。安装RubyGems，需要先下载安装包，然后解压开后运行：</p>
 
-<blockquote><p>We have had a report that in order to get syncing working on IIS 6.0-hosted WebDAV, you have to configure IIS to add a MIME type of &ldquo;Text&rdquo; for files with the &ldquo;.client&rdquo; extension. (These are the files OmniFocus uses to identify the different clients which sync with a given database.)</p></blockquote>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby setup.rb</span></code></pre></td></tr></table></div></figure>
 
-<p>意思就是有一些用户反映跟我一样的问题，解决方案就是配置IIS，在MIME的“Text”下面增加一个“.client”的扩展名，这个扩展名的文件是OmniFocus用来定义不同的设备同步时对应不同的数据库。因为IIS默认不支持这个扩展名，所以WebDAV是不允许创建.client文件的。</p>
 
-<p>按照文中所说编辑一下，果然同步成功！现在可以享受三个设备快速同步的乐趣了，哈哈！</p>
+<p>brew和gem不同，brew用于操作系统层面上软件包的安装，而gem只是管理ruby软件。</p>
+
+<p>Ruby Version Manager是一个命令行工具，可以方便地安装、管理不同的ruby版本，还可以为每个ruby版本创建不同的gem集合（gemsets），从而使不同的ruby应用可以独立使用自己的gem集合。</p>
+
+<p>rvm的安装：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ \curl -L https://get.rvm.io | bash -s stable</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bundler为ruby应用维持一个一致性的环境。它会跟踪应用代码和应用所需要的gem，这样应用总能包含它需要的gem（和版本）。</p>
+
+<p>bundler的安装：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install bundler</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装顺序：先安装rvm，然后选择安装一个ruby版本，就可以提供一个完整的ruby运行环境。之后可以安装brew（brew基于ruby）和gem，分别管理操作系统和ruby的软件包。有了gem之后再安装bundler，因为bundler本身也是一个gem，直接通过gem安装即可。</p>
 </div>
 
 
@@ -158,12 +171,12 @@
   
 
 
-<time datetime="2013-08-19T22:00:00+08:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
+<time datetime="2013-10-25T02:43:00+08:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/omnifocus/'>OmniFocus</a>
+    <a class='category' href='/blog/categories/mac/'>Mac</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
   
 </span>
 
@@ -172,7 +185,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/" data-via="" data-counturl="http://alvinhu.com/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alvinhu.com/blog/2013/10/25/brew-gem-rvm-and-bundler/" data-via="" data-counturl="http://alvinhu.com/blog/2013/10/25/brew-gem-rvm-and-bundler/" >Tweet</a>
   
   
   
@@ -181,10 +194,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left articlenav" href="/blog/2013/07/17/how-to-enable-microsoft-dot-net-framework-3-5-on-windows-8-offline/" title="Previous Post: 如何在Windows 8中离线安装.NET Framework 3.5">&laquo; 如何在Windows 8中离线安装.NET Framework 3.5</a>
+        <a class="basic-alignment left articlenav" href="/blog/2013/08/19/404-error-when-trying-to-sync-omnifocus-via-webdav-hosted-on-iis/" title="Previous Post: 解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题">&laquo; 解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题</a>
       
-      
-        <a class="basic-alignment right articlenav" href="/blog/2013/10/25/brew-gem-rvm-and-bundler/" title="Next Post: brew, gem, rvm and bundler">brew, gem, rvm and bundler &raquo;</a>
       
     </p>
   </footer>
@@ -193,7 +204,7 @@
   <section>
     <h1>Comments</h1>
     <div id="comments" aria-live="polite"><!-- Duoshuo Comment BEGIN -->
-<div class="ds-thread" data-title="解决通过基于IIS下的WebDAV同步OmniFocus出现404错误的问题"></div>
+<div class="ds-thread" data-title="brew, gem, rvm and bundler"></div>
 <script type="text/javascript">
   var duoshuoQuery = {short_name:"alvinhu"};
   (function() {
